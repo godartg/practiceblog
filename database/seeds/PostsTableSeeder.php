@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Post;
 use App\Category;
+use App\Tag;
 use Carbon\Carbon;
 
 class PostsTableSeeder extends Seeder
@@ -15,7 +16,16 @@ class PostsTableSeeder extends Seeder
     public function run()
     {
         Post::truncate();
+        Tag::truncate();
         Category::truncate();
+
+        $tag = new Tag;
+        $tag->name = "Etiqueta 1";
+        $tag->save();
+
+        $tag = new Tag;
+        $tag->name = "Etiqueta 2";
+        $tag->save();
 
         $category = new Category;
         $category->name = "Primera categoria";
