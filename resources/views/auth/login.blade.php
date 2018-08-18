@@ -35,6 +35,7 @@
 
     <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
       @csrf
+
       <div class="form-group{{ $errors->has('email') ? ' is-invalid' : '' }} has-feedback">
         <input 
             type="email" 
@@ -51,6 +52,7 @@
             @endif
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
+
       <div class="form-group{{ $errors->has('password') ? ' is-invalid' : '' }} has-feedback">
         <input 
             type="password" 
@@ -66,6 +68,7 @@
             @endif
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
+
       <div class="row">
         <div class="col-xs-8">
           <div class="checkbox icheck">
@@ -80,6 +83,7 @@
         </div>
         <!-- /.col -->
       </div>
+      
     </form>
 
     {{-- <div class="social-auth-links text-center">

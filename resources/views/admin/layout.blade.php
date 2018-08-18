@@ -18,6 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 
    
+@stack('styles')
 
 
   <!-- Theme style -->
@@ -28,7 +29,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   -->
   <link rel="stylesheet" href="/adminlte/css/skins/skin-blue.min.css">
 
-@stack('styles')
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -286,6 +286,10 @@ desired effect
     <!-- Main content -->
     <section class="content">
 
+      @if(session()->has('flash'))
+        <div class="alert alert-success">{{ session('flash') }}</div>
+      @endif
+
       @yield('content')
 
     </section>
@@ -391,9 +395,9 @@ desired effect
 
 
 <!-- AdminLTE App -->
+<script src="/adminlte/js/app.min.js"></script>
 @stack('scripts')
 
-<script src="/adminlte/js/app.min.js"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
