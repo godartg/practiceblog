@@ -25,6 +25,7 @@
                     <li><a href="about.html" class="text-uppercase">About</a></li>
                     <li><a href="archive.html" class="text-uppercase">Archive</a></li>
                     <li><a href="contact.html" class="text-uppercase">Contact</a></li>
+                    <li><a href="contact.html" class="text-uppercase">OTHER</a></li>
                 </ul>
             </nav>
         </div>
