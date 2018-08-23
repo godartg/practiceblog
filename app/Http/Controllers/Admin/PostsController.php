@@ -17,14 +17,39 @@ class PostsController extends Controller
     	return view('admin.posts.index',compact('posts'));
     }
 
-    public function create()
-    {
-    	$tags = Tag::all();
-    	$categorias = Category::all();
-    	return view('admin.posts.create',compact('categorias','tags'));
-    }
+    // public function create()
+    // {
+    // 	$tags = Tag::all();
+    // 	$categorias = Category::all();
+    // 	return view('admin.posts.create',compact('categorias','tags'));
+    // }
 
     public function store(Request $request)
+    {
+        $this->validate($request,[
+            'title' => 'required'
+        ]);
+
+        $post = Post::create([
+            'title' => $request->get('title'),
+            'url'=> str_slug($request->get('title')),
+            // 'excerpt' => '',
+            // 'body' => '',
+            // 'category_id' => 1,
+            // 'published_at' => Carbon::now(),
+
+        ]);
+        return redirect()->route('admin.posts.edit',$post);
+    }
+
+    public function edit(Post $post)
+    {
+        $tags = Tag::all();
+        $categories = Category::all();
+        return view('admin.posts.edit',compact('categories','tags','post'));
+    }
+
+    public function update(Post $post,Request $request)
     {
         // dd($request->all());
         // dd($request->all());
@@ -40,8 +65,8 @@ class PostsController extends Controller
             'excerpt' => 'required'
         ]);
 
-        $post = new Post;
         $post->title = $request->get('title');
+        $post->url = str_slug($request->get('title'));
         $post->body = $request->get('body');
         $post->excerpt = $request->get('excerpt');
         $post->category_id = $request->get('category');
@@ -49,8 +74,8 @@ class PostsController extends Controller
 
         $post->save();
 
-        $post->tags()->attach($request->get('tags'));
+        $post->tags()->sync($request->get('tags'));
 
-        return back()->with('flash','tu publicación ha sido creada');
+        return back()->with('flash','tu publicación ha sido guardada');
     }
 }

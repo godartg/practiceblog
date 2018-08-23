@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Post;
 
 class PostsController extends Controller
 {
-    public function show($id)
+    public function show(Post $post)
     {
-    	return view('posts.show');
+    	// $post = Post::find($id);
+    	// $tags = Tag::where(,$id)
+    	return view('posts.show',compact('post'));
     }
 }
