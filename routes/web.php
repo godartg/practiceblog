@@ -2,7 +2,7 @@
 
 Route::get('/', 'PagesController@home');
 
-Route::get('blog/{post}','PostsController@show');
+Route::get('blog/{post}','PostsController@show')->name('posts.show');
 
 Route::get('posts', function(){
 	return App\Post::all();
