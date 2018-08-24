@@ -100,6 +100,10 @@
 				</div>
 
 				<div class="form-group">
+					<div class="dropzone"></div>
+				</div>
+
+				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-block">Guardar publicación</button>
 				</div>
 			</div>
@@ -111,13 +115,14 @@
 
 @push('styles')
 
-  <!-- Select2 -->
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css">
 	<link rel="stylesheet" href="/adminlte/plugins/select2/select2.min.css">
 	<link rel="stylesheet" href="/adminlte/plugins/datepicker/datepicker3.css">
   	<link rel="stylesheet" href="/adminlte/plugins/datatables/dataTables.bootstrap.css">
 
 @endpush
 @push('scripts')
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
 	<script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
 	<script src="/adminlte/plugins/select2/select2.full.min.js"></script>
 	<script src="/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
@@ -128,14 +133,29 @@
 
 		$(".select2").select2();
 
-		$(function () {
-		    // Replace the <textarea id="editor1"> with a CKEditor
-		    // instance, using default configuration.
-		    CKEDITOR.replace('editor');
-		    //bootstrap WYSIHTML5 - text editor
-		    $(".textarea").wysihtml5();
-		});
+		CKEDITOR.replace('editor');
 		
+		var myDropzone = new Dropzone('.dropzone',{
+		   url: '/admin/posts/{{ $post->url }}/photos',
+		   paramName: 'photo',
+		   acceptedFiles: 'image/*',
+		   maxFilesize: 2,
+		   headers: {
+		   		'X-CSRF-TOKEN': '{{ csrf_token() }}'
+		   },
+		   dictDefaultMessage: 'Arrastra aqui las imagenes para subirlas'
+		});
+
+		myDropzone.on('error', function(file,res){
+			var msg = res.errors.photo[0];
+			$('.dz-error-message:last > span').text(msg);
+		});
+
+		Dropzone.autoDiscover = false;
+		
+		/*para que dropzone no lo inicialice se usa: dropzone autodiscover = false (fuera de la inicializacion)
+		//maxFilesize esa dado en MB paramName cambia el valor del nombre del parametro,
+		maxFiles:1, hace que la cantidad maxima de archivos a subir en el servidor sea uno */
 
 
 </script>

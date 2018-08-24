@@ -18,7 +18,7 @@
 						type="text" 
 						class="form-control" 
 						value="{{ old('title') }}" 
-						placeholder="Titulo de la publicación">
+						placeholder="Titulo de la publicación" required>
 						{!! $errors->first('title','<span class="help-block">:message</span>') !!}
 					</div>
 				</div>
