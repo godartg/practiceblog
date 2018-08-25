@@ -26,6 +26,17 @@ class PhotosController extends Controller
 
 
     }
+
+    public function destroy(Photo $photo)
+    {
+        $photo->delete();
+
+        $photoPath = str_replace('storage', 'public', $photo->url);
+
+        Storage::delete($photoPath);
+
+        return back()->with('flash','Foto eliminada');
+    }
 }
 
 /* jpeg, png, bmp, gif, o svg, el maximo en kilobytes, tambien se pueden validar dimensioes con: 

@@ -24,6 +24,7 @@ Route::group([
 
 	Route::post('posts/{post}/photos','PhotosController@store')->name('admin.posts.photos.store');
 
+	Route::delete('photos/{photo}','PhotosController@destroy')->name('admin.photos.destroy');
 
 });
 

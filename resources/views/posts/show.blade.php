@@ -3,7 +3,12 @@
 @section('meta-description',$post->excerpt)
 @section('content')
 
-  <article class="post image-w-text container">
+  <article class="post container">
+    @if ($post->photos->count() === 1)
+        <figure><img src="{{ $post->photos->first()->url }}" alt="" class="img-responsive"></figure>
+    @elseif($post->photos->count() > 1)
+        @include('posts.carousel')
+    @endif
     <div class="content-post">
       <header class="container-flex space-between">
         <div class="date">
@@ -41,6 +46,15 @@
 
 @endsection
 
+@push('styles')
+  <link rel="stylesheet" href="/css/twitter-bootstrap.css">
+@endpush
+
 @push('scripts')
 	<script id="dsq-count-scr" src="//zendero.disqus.com/count.js" async></script>
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script src="/js/twitter-bootstrap.js"></script>
 @endpush
