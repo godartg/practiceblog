@@ -9,7 +9,7 @@ class PagesController extends Controller
 {
     public function home()
     {
-    	$posts = Post::published()->get();
+    	$posts = Post::published()->paginate(); //por de fececto la paginacion es de  en 15
 	    return view('welcome',compact('posts'));
 
     }
