@@ -89,18 +89,18 @@
 	                </div>
               	</div>
 
-              	<div class="form-group {{ $errors->has('category')? 'has-error': '' }}">
+              	<div class="form-group {{ $errors->has('category_id')? 'has-error': '' }}">
               		<label>Categorías</label>
-              		<select name="category" class="form-control select2">
+              		<select name="category_id" class="form-control select2">
               				<option value="">Seleccione una categoría</option>
               			@foreach($categories as $category)
-              				<option value="{{ $category->id }}" 
-              					{{ old('category',$category->id) == $category->id ? 'selected' : '' }}>
+              				<option value="{{ $category->id }}"
+              						{{ old('category_id',$post->category->id) == $category->id ? 'selected' : '' }}>
               					{{ $category->name }}
               				</option>
               			@endforeach
               		</select>
-              		{!! $errors->first('category','<span class="help-block">:message</span>') !!}
+              		{!! $errors->first('category_id','<span class="help-block">:message</span>') !!}
               	</div>
 
               	<div class="form-group {{ $errors->has('etiquetas')? 'has-error': '' }}">
@@ -110,8 +110,7 @@
               			data-placeholder="Selecciona una o mas etiquetas" 
               			style="width: 100%;">
 		                @foreach($tags as $tag)
-		                  	<option {{ collect(old('tags',$post->tags->pluck('id')))->contains($tag->id) ? 'selected' : '' }} 
-		                  		value="{{ $tag->id }}"> 
+		                  	<option {{ collect(old('tags',$post->tags->pluck('id')))->contains($tag->id) ? 'selected' : '' }} value="{{ $tag->id }}"> 
 		                  		{{ $tag->name }}
 		                  	</option>
 		                @endforeach
