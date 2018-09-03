@@ -9,7 +9,7 @@ class Photo extends Model
 {
     protected $guarded = [];
 
-    protected function boot()
+    protected static function boot()
     {
     	parent::boot();
 

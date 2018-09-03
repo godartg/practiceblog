@@ -14,6 +14,16 @@ class Post extends Model
         'title', 'body', 'iframe', 'excerpt', 'published_at', 'category_id', 
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function($post){
+            $post->tags()->detach();
+            $post->photos->each->delete();
+        });
+    }
+
     protected $dates = ['published_at']; // published_at es instancia de carbon
     
     public function getRouteKeyName()

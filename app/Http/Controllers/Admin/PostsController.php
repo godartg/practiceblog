@@ -82,4 +82,19 @@ class PostsController extends Controller
 
 
     }
+
+    public function destroy(Post $post)
+    {
+        
+        // $post->photos()->delete();
+        // foreach ($post->photos as $photo) {
+        //     $photo->delete();
+        // }
+        // $post->photos->each(function($photo){
+        //     $photo->delete();
+        // });
+
+        $post->delete();
+        return redirect()->route('admin.posts.index')->with('flash','tu publicación ha sido eliminada');
+    }
 }
