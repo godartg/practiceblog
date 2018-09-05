@@ -51,11 +51,38 @@ class Post extends Model
 	    	->where('published_at','<=', Carbon::now() )
 	    	->latest('published_at');
     }
-    public function setTitleAttribute($title)
+
+    static function create(array $attributes = [])
     {
-        $this->attributes['title'] = $title;
-        $this->attributes['url'] = str_slug($title);
+        $post = static::query()->create($attributes);
+        $post->generateUrl();
+
+        return $post;
     }
+
+    public function generateUrl()
+    {
+        $url = str_slug($this->title);
+        if ($this->whereUrl($url)->exists()) 
+        {
+            $url = "{$url}-{$this->id}";
+        }
+        $this->url = $url;
+        $this->save();
+    }
+    // public function setTitleAttribute($title)
+    // {
+    //     $this->attributes['title'] = $title;
+
+    //     $url = str_slug($title);
+    //     $duplicateUrlCount = Post::where('url','LIKE',"{$url}%")->count();
+    //     if ($duplicateUrlCount) 
+    //     {
+    //         $url .="-". ++$duplicateUrlCount;
+    //     }
+
+    //     $this->attributes['url'] = $url;
+    // }
 
     public function setPublishedAtAttribute($published_at)
     {

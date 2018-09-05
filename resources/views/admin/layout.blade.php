@@ -394,11 +394,14 @@ desired effect
 <script src="/adminlte/bootstrap/js/bootstrap.min.js"></script>
 
 
+@unless (request()->is('/admin/posts/*'))
+  @include('admin.posts.create')
+@endunless
+@stack('scripts')
 <!-- AdminLTE App -->
 <script src="/adminlte/js/app.min.js"></script>
-@stack('scripts')
 
-@include('admin.posts.create')
+
 
 </body>
 </html>
