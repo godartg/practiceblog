@@ -11,7 +11,7 @@ class CategoriesController extends Controller
     	// return $category->load('posts');
     	// $posts =  $category->posts;
     	// return view('welcome',compact('posts'));
-    	return view('welcome',[
+    	return view('pages.home',[
     		'title' => "Publicaciones de la categoria: $category->name ",
     		'posts' => $category->posts()->paginate(),
     	]);
