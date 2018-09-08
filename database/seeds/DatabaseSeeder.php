@@ -11,9 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement('ALTER roles DISABLE TRIGGER ALL;');
+        DB::statement('SET session_replication_role = replica;');
         $this->call(UserTableSeeder::class);
         $this->call(PostsTableSeeder::class);
-        DB::statement('ALTER roles ENABLE TRIGGER ALL;');
+        DB::statement('SET session_replication_role = DEFAULT;');
     }
 }
