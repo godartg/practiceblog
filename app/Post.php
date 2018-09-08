@@ -56,6 +56,19 @@ class Post extends Model
 	    	->where('published_at','<=', Carbon::now() )
 	    	->latest('published_at');
     }
+
+    public function scopeAllowed($query)
+    {
+        if ( auth()->user()->hasRole('Admin') ) 
+        {
+            return $query;
+        }
+        else
+        {
+            return $query->where('user_id',auth()->id());
+        }
+    }
+
     public function isPublished()
     {
         return ! is_null($this->published_at) && $this->published_at < today() ;

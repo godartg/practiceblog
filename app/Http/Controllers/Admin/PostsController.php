@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Category;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePostRequest;
-use App\Post;
 use App\Tag;
+use App\Post;
+use App\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePostRequest;
 
 class PostsController extends Controller
 {
     public function index()
     {
-    	// $posts = Post::where('user_id',auth()->id())->get();
-        $posts = auth()->user()->posts;
-    	return view('admin.posts.index',compact('posts'));
+
+        $posts = Post::allowed()->get();
+        return view('admin.posts.index',compact('posts'));
+        
     }
 
     public function store(Request $request)
@@ -64,3 +65,4 @@ class PostsController extends Controller
         return redirect()->route('admin.posts.index')->with('flash','tu publicación ha sido eliminada');
     }
 }
+//falta ver desde 051 paquete laravel permision
