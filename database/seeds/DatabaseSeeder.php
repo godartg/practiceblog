@@ -11,9 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement("TRUNCATE TABLE roles RESTART IDENTITY CASCADE");
+        DB::statement('ALTER roles DISABLE TRIGGER ALL;');
         $this->call(UserTableSeeder::class);
         $this->call(PostsTableSeeder::class);
-
+        DB::statement('ALTER roles ENABLE TRIGGER ALL;');
     }
 }
