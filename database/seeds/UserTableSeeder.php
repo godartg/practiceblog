@@ -3,6 +3,7 @@
 use App\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class UserTableSeeder extends Seeder
 {
@@ -15,9 +16,15 @@ class UserTableSeeder extends Seeder
     {
         User::truncate();
         Role::truncate();
+        Permission::truncate();
 
         $adminRole = Role::create([ 'name' => 'Admin' ]);
         $writerRole = Role::create([ 'name' => 'Writer' ]);
+
+        $viewPostPermission = Permission::create([ 'name' => 'View posts' ]);
+        $createPostPermission = Permission::create([ 'name' => 'Create posts' ]);
+        $updatePostPermission = Permission::create([ 'name' => 'Update posts' ]);
+        $deletePostPermission = Permission::create([ 'name' => 'Delete posts' ]);
 
         $admin = new User;
         $admin->name = 'Admin';
