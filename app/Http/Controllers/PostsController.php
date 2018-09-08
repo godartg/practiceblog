@@ -11,6 +11,10 @@ class PostsController extends Controller
     {
     	// $post = Post::find($id);
     	// $tags = Tag::where(,$id)
-    	return view('posts.show',compact('post'));
+    	if ($post->isPublished()|| auth()->check()) 
+    	{
+    		return view('posts.show',compact('post'));
+    	}
+    	abort(404);
     }
 }

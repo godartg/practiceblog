@@ -14,7 +14,7 @@
   <div class="carousel-inner" role="listbox">
   	@foreach ($post->photos as $photo)
   		<div class="item {{ $loop->first ? 'active' : '' }}">
-  			<img src="{{ url($photo->url) }}" >
+  			<img src="/storage/{{ $photo->url }}" >
   		</div>
   	@endforeach
   </div>
