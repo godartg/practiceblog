@@ -65,4 +65,4 @@ class PostsController extends Controller
         return redirect()->route('admin.posts.index')->with('flash','tu publicación ha sido eliminada');
     }
 }
-//falta ver desde 051 paquete laravel permision
+//falta ver desde 054

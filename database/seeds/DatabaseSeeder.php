@@ -11,9 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // DB::statement('SET session_replication_role = replica;');
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
         $this->call(UserTableSeeder::class);
         $this->call(PostsTableSeeder::class);
-        // DB::statement('SET session_replication_role = DEFAULT;');
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 }
