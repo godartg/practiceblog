@@ -30,6 +30,17 @@
 							<input name="email" value="{{ old('email',$user->email) }}" class="form-control">
 						</div>
 
+						<div class="form-group">
+							<label for="password">Contraseña:</label>
+							<input type="password" name="password" class="form-control" placeholder="Contraseña">
+							<span class="help-block">Dejar en blanco para no cambiar la contraseña</span>
+						</div>
+						
+						<div class="form-group">
+							<label for="password_confirmation">Repite la contraseña:</label>
+							<input type="password" name="password_confirmation" class="form-control" placeholder="Repite la contraseña">
+						</div>
+
 						<button class="btn btn-primary btn-block">Actualizar usuario</button>
 					</form>
 				</div>
