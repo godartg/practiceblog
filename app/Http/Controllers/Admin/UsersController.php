@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
 use App\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class UsersController extends Controller
@@ -28,7 +29,10 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        $user = new User;
+        $roles = Role::with('permissions')->get();
+        $permissions = Permission::pluck('name','id');
+        return view('admin.users.create',compact('user','roles','permissions'));
     }
 
     /**
@@ -39,7 +43,30 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validar formulario
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+        ]);
+        // generar contraseña
+        $data['password'] = str_random(8);//cadena de caracteres aleatoria , esto ya se encripta
+        // creamos el Usuario
+        $user = User::create($data);
+        // asignamos los roles
+        if ($request->filled('roles')) 
+        {
+            $user->assignRole($request->roles);
+        }
+        // asignamos los permisos
+        if ($request->filled('permissions')) 
+        {
+            $user->givePermissionTo($request->permissions);
+        }
+        // enviamos el email
+
+        // regresamos una respuesta al usuario
+        return redirect()->route('admin.users.index')->withFlash('El usuario ha sido creado');
+        
     }
 
     /**
@@ -61,8 +88,9 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-       $roles = Role::pluck('name','id');
-       return view('admin.users.edit',compact('user','roles'));
+       $roles = Role::with('permissions')->get();
+       $permissions = Permission::pluck('name','id');
+       return view('admin.users.edit',compact('user','roles','permissions'));
     }
 
     /**

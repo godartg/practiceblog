@@ -3,19 +3,19 @@
 	<ul class="container-flex list-unstyled">
 		<li class="pure-menu-item">
 			<a href="{{ route('pages.home') }}" 
-				class="pure-menu-link c-gris-2 text-uppercase {{ setActiveAttribute('pages.home') }}">Inicio</a>
+				class="pure-menu-link c-gris-2 text-uppercase {{ setActiveRoute('pages.home') }}">Inicio</a>
 		</li>
 		<li class="pure-menu-item">
 			<a href="{{ route('pages.about') }}" 
-				class="pure-menu-link c-gris-2 text-uppercase {{ setActiveAttribute('pages.about') }}">Nosotros</a>
+				class="pure-menu-link c-gris-2 text-uppercase {{ setActiveRoute('pages.about') }}">Nosotros</a>
 		</li>
 		<li class="pure-menu-item">
 			<a href="{{ route('pages.archive') }}" 
-				class="pure-menu-link c-gris-2 text-uppercase {{ setActiveAttribute('pages.archive') }}">Archivo</a>
+				class="pure-menu-link c-gris-2 text-uppercase {{ setActiveRoute('pages.archive') }}">Archivo</a>
 		</li>
 		<li class="pure-menu-item">
 			<a href="{{ route('pages.contact') }}" 
-				class="pure-menu-link c-gris-2 text-uppercase {{ setActiveAttribute('pages.contact') }}">Contacto</a>
+				class="pure-menu-link c-gris-2 text-uppercase {{ setActiveRoute('pages.contact') }}">Contacto</a>
 		</li>
 	</ul>
 </nav>
