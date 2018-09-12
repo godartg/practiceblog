@@ -38,4 +38,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
+    public function scopeAllowed($query)
+    {
+        //view es nombre de la funcion en UserPolicy y $this es usuario actual
+        if ( auth()->user()->can('view',$this ) ) 
+        {
+            return $query;
+        }
+        
+        return $query->where('id',auth()->id());
+    }
 }

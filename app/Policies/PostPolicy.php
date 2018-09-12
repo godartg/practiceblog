@@ -16,7 +16,7 @@ class PostPolicy
         {
             return true;
         }
-        //aca no se debe devolver false ya que se interrumpirian las demas funciones
+        //aca no se debe devolver false ya que se interrumpirian las demas funciones, se puede hacer global
     }
 
     /**

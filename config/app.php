@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Zendero'), //esto se configura desde el env
+    'name' => env('APP_NAME', 'Aprendible'), //esto se configura desde el env
     // 'name' => 'Zendero',
 
     /*
@@ -27,8 +27,8 @@ return [
     |
     */
 
-    // 'env' => env('APP_ENV', 'production'),
-    'env' => env('APP_ENV', 'local'),
+    'env' => env('APP_ENV', 'production'),
+    // 'env' => env('APP_ENV', 'local'),
 
     /*
     |--------------------------------------------------------------------------

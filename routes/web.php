@@ -24,8 +24,12 @@ Route::group([
 
 	Route::resource('posts','PostsController',['except' => 'show', 'as' => 'admin']);
 	Route::resource('users','UsersController',['as' => 'admin']);
-	Route::put('users/{user}/roles','UsersRolesController@update')->name('admin.users.roles.update');
-	Route::put('users/{user}/permissions','UsersPermissionsController@update')->name('admin.users.permissions.update');
+	Route::middleware('role:Admin')
+		->put('users/{user}/roles','UsersRolesController@update')
+		->name('admin.users.roles.update');
+	Route::middleware('role:Admin')
+		->put('users/{user}/permissions','UsersPermissionsController@update')
+		->name('admin.users.permissions.update');
 
 	Route::post('posts/{post}/photos','PhotosController@store')->name('admin.posts.photos.store');
 	Route::delete('photos/{photo}','PhotosController@destroy')->name('admin.photos.destroy');
@@ -50,3 +54,8 @@ Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm'
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+
+
+// Route::get('email', function(){
+// 	return new App\Mail\LoginCredentials(App\User::first(), '123456');
+// });
