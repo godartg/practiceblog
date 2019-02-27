@@ -34,5 +34,15 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+    'google' => [
+        'client_id'     => env('GOOGLE_CLIENT_ID'),
+        'project_id'    => env('GOOGLE_APP_ID'),
+        'auth_uri'      => env('GOOGLE_AUTH_URI'),
+        'token_uri'     => env('GOOGLE_TOKEN_URI'),
+        'auth_provider_xx509_cert_url'      => env('GOOGLE_AUTH_PROVIDER'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect'      => env('GOOGLE_CALLBACK'),
+        'redirect_uris' => [env('GOOGLE_CALLBACK')],
+    ],
 
 ];

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Post;
+use App\SocialNetwork;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -17,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 
     ];
 
     /**
@@ -34,6 +35,9 @@ class User extends Authenticatable
         $this->attributes['password'] = bcrypt($password);
     }
 
+    public function socialNetwork(){
+        return $this->hasMany(SocialNetwork::class);
+    }
     public function posts()
     {
         return $this->hasMany(Post::class);

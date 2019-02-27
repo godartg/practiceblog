@@ -74,7 +74,7 @@
 		<div class="box box-primary">
 			<div class="box-body">
 				<div class="form-group">
-	                <label>Fecha de pulblicación</label>
+	                <label>Fecha de publicación</label>
 
 	                <div class="input-group date">
 	                  <div class="input-group-addon">
@@ -120,17 +120,23 @@
 
 				<div class="form-group {{ $errors->has('excerpt')? 'has-error': '' }}">
 					<label>Extracto de la publicación</label>
-
 					<textarea 
 						name="excerpt" 
 						class="md-textarea form-control" 
 						placeholder="Ingresa un extracto o resumen de la publicación">{{ old('excerpt',$post->excerpt) }}</textarea>
 					{!! $errors->first('excerpt','<span class="help-block">:message</span>') !!}
 				</div>
-
-				<div class="form-group">
-					<div class="dropzone"></div>
-				</div>
+			
+				@if (DB::table('social_networks')->whereIn('user_id', [auth()->user()->id])->get()->isNotEmpty())
+					<div class="form-group">
+						<div class="dropzone"></div>
+					</div>
+				@else
+					<div class="form-group">
+						<a class="btn btn-success" href="{{route('login.google')}}">Agregar Cuenta Drive</a>
+					</div>
+				@endif
+				
 
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-block">Guardar publicación</button>

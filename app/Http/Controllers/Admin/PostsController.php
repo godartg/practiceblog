@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Tag;
 use App\Post;
 use App\Category;
+use App\SocialNetwork;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -42,6 +43,7 @@ class PostsController extends Controller
         return view('admin.posts.edit',[
             'post' => $post,
             'tags' => Tag::all(),
+            'social_network' => SocialNetwork::all(),
             'categories' => Category::all()
         ]);
     }
