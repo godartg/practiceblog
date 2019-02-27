@@ -6,11 +6,14 @@ use App\Post;
 use App\Photo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\GoogleDriverController;
 
 class PhotosController extends Controller
 {
     public function store(Post $post)
-    {
+    {   
+        $drive= new GoogleDrive ;
+        
     	$this->validate(request(),[
     		'photo' => 'required|image|max:2048'
     	]);
@@ -20,6 +23,7 @@ class PhotosController extends Controller
     	// $photoUrl = Storage::url($photo);
 
         $post->photos()->create([
+
     		'url' => request()->file('photo')->store('posts','public'),
         ]);
 

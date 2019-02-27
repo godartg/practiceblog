@@ -6,6 +6,7 @@ use Exception;
 use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Drive_DriveFile;
+use App\SocialNetwork;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +16,7 @@ class GoogleDriveController extends Controller
     private $drive;
     public function __construct(Google_client $client){
         $this->middleware(function ($request, $next) use ($client){
-            $client->refreshToken(Auth::user()->refresh_token);
+            $client->refreshToken(SocialNetwork()->where('user_id', Auth::user()->id)->select('refreshToken')->get());
             $this->drive = new Google_Service_Drive($client);
             return $next($request); 
         });
@@ -31,13 +32,17 @@ class GoogleDriveController extends Controller
         ];
         $results = $this->drive->files->ListFiles($optParams);
         $list = $results->getFiles();
-        print view('drive.index', compact('list'));
+        return compact('list');
     }
     function uploadFile(Request $request){
+        $lista = $this->getFolders();
+        if($lista->firstWhere('name', 'practiceblog')->isEmpty()){
+            $this->createFolder('practiceblog');
+        }
         if($request->isMethod('GET')){
             return view('upload');
         }else{
-            $this->createFile($request->file('file'));
+            $this->createFile($request->file('file'), 'practiceblog');
         }
     }
  
