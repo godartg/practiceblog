@@ -3,18 +3,23 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Photo extends Model
 {
-    protected $guarded = [];
-
-    protected static function boot()
-    {
-    	parent::boot();
-
-    	static::deleting(function($photo){
-    		Storage::disk('public')->delete($photo->url);
-    	});
-    }
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'post_id', 'url',
+    ];
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at', 'updated_at',
+    ];
 }

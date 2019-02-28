@@ -145,7 +145,7 @@
 		</div>
 	</div>
 	</form>
-	
+	@include('admin.posts.upload')
 </div>
 @stop
 
@@ -162,6 +162,7 @@
 	<script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
 	<script src="/adminlte/plugins/select2/select2.full.min.js"></script>
 	<script src="/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
+
 	<script>
 		$('#datepicker').datepicker({
 		  autoclose: true
@@ -175,28 +176,35 @@
 
 		CKEDITOR.config.height = 315;
 		
-		var myDropzone = new Dropzone('.dropzone',{
-		   url: '/admin/posts/{{ $post->url }}/photos',
-		   paramName: 'photo',
-		   acceptedFiles: 'image/*',
-		   maxFilesize: 2,
-		   headers: {
-		   		'X-CSRF-TOKEN': '{{ csrf_token() }}'
-		   },
-		   dictDefaultMessage: 'Arrastra aqui las imagenes para subirlas'
+		$(function(){
+			'use strict';
+
+			// set the csrf-token for all AJAX requests
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
+
+			// fileupload() related actions
+			if ($().fileupload) {
+				
+				// Initialize the jQuery File Upload widget:
+				$('#fileupload').fileupload({
+					// Uncomment the following to send cross-domain cookies:
+					//xhrFields: {withCredentials: true},
+					url: $('#fileupload').attr('action'),
+					// Enable image resizing, except for Android and Opera,
+					// which actually support image resizing, but fail to
+					// send Blob objects via XHR requests:
+					disableImageResize: /Android(?!.*Chrome)|Opera/
+						.test(window.navigator.userAgent),
+					maxFileSize: 2000000,
+					acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+				});
+
+				
+			}
 		});
-
-		myDropzone.on('error', function(file,res){
-			var msg = res.errors.photo[0];
-			$('.dz-error-message:last > span').text(msg);
-		});
-
-		Dropzone.autoDiscover = false;
-		
-		/*para que dropzone no lo inicialice se usa: dropzone autodiscover = false (fuera de la inicializacion)
-		//maxFilesize esa dado en MB paramName cambia el valor del nombre del parametro,
-		maxFiles:1, hace que la cantidad maxima de archivos a subir en el servidor sea uno */
-
-
-</script>
+	</script>
 @endpush

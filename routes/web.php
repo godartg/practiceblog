@@ -20,8 +20,7 @@ Route::group([
 	'middleware' => 'auth'], 
 	function (){
 	Route::get('/','AdminController@index')->name('dashboard');
-	Route::get('login/google/callback', 'SocialAuthController@handleProviderGoogleCallback');
-
+	Route::post('upload', 'GoogleDriveController@uploadFile')->name('admin.upload');
 	Route::resource('posts','PostsController',['except' => 'show', 'as' => 'admin']);
 	Route::resource('users','UsersController',['as' => 'admin']);
 	Route::middleware('role:Admin')
@@ -36,10 +35,6 @@ Route::group([
 
 });
 
-Route::middleware('auth')->group(function(){
-    Route::get('/api', 'GoogleDriveController@getFolders')->name('google.folders');
-    Route::get('/api/upload', 'GoogleDriveController@uploadFiles');
-});
 //Rutas de autenticación con redes sociales
 Route::get('login/google', 'SocialAuthController@redirectToGoogleProvider')->name('login.google');
 Route::get('login/google/callback', 'SocialAuthController@handleProviderGoogleCallback');

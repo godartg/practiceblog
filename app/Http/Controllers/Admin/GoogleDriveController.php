@@ -1,15 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Exception;
 use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Drive_DriveFile;
 use App\SocialNetwork;
+use App\Photo;
+use App\Post;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+
 
 class GoogleDriveController extends Controller
 {
@@ -66,8 +70,6 @@ class GoogleDriveController extends Controller
             'uploadType' => 'multipart',
             'fields' => 'id'
         ]);
- 
-        dd($file->id);
     }
  
     function deleteFileOrFolder($id){
@@ -85,5 +87,55 @@ class GoogleDriveController extends Controller
         $folder = $this->drive->files->create($folder_meta, array(
             'fields' => 'id'));
         return $folder->id;
+    }
+
+    public function doUpload(Post $post)
+    {
+        $this->validate(post(),[
+    		'photo' => 'required|image|max:2048'
+    	]);
+        if ($post->hasFile('file')) {
+
+            $file = $post->file('file');
+
+            $mime_type = $file->getMimeType();
+            $title = $file->getClientOriginalName();
+            $description = $post->input('description');
+
+            $drive_file = new \Google_Service_Drive_DriveFile();
+            $drive_file->setName($title);
+            $drive_file->setDescription($description);
+            $drive_file->setMimeType($mime_type);
+
+            try {
+                $createdFile = $this->drive->files->create($drive_file, [
+                    'data' => $file,
+                    'mimeType' => $mime_type,
+                    'uploadType' => 'multipart'
+                ]);
+
+                $file_id = $createdFile->getId();
+                $post->photos()->create([
+
+                    'url' => $file_id,
+                ]);
+        
+                return redirect('/upload')
+                    ->with('message', [
+                        'type' => 'success',
+                        'text' => "File was uploaded with the following ID: {$file_id}"
+                ]);
+
+            } catch (Exception $e) {
+
+                return redirect('/upload')
+                    ->with('message', [
+                        'type' => 'error',
+                        'text' => 'An error occurred while trying to upload the file'
+                    ]);
+
+            }
+        }
+
     }
 }
