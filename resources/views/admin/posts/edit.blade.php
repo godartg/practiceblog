@@ -29,7 +29,7 @@
 								<button class="btn btn-xs btn-danger" style="position: absolute;">
 									<i class="fa fa-remove"></i>
 								</button>
-								<img class="img-responsive" src="/storage/{{ $photo->url }}">
+								<img class="img-responsive" src="/storage/app/public/{{ $photo->url }}">
 							</div>
 						</form>
 						@endforeach
@@ -126,18 +126,6 @@
 						placeholder="Ingresa un extracto o resumen de la publicación">{{ old('excerpt',$post->excerpt) }}</textarea>
 					{!! $errors->first('excerpt','<span class="help-block">:message</span>') !!}
 				</div>
-			
-				@if (DB::table('social_networks')->whereIn('user_id', [auth()->user()->id])->get()->isNotEmpty())
-					<div class="form-group">
-						<div class="dropzone"></div>
-					</div>
-				@else
-					<div class="form-group">
-						<a class="btn btn-success" href="{{route('login.google')}}">Agregar Cuenta Drive</a>
-					</div>
-				@endif
-				
-
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-block">Guardar publicación</button>
 				</div>
@@ -151,18 +139,16 @@
 
 @push('styles')
 
-  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css">
 	<link rel="stylesheet" href="/adminlte/plugins/select2/select2.min.css">
 	<link rel="stylesheet" href="/adminlte/plugins/datepicker/datepicker3.css">
   	<link rel="stylesheet" href="/adminlte/plugins/datatables/dataTables.bootstrap.css">
 
 @endpush
 @push('scripts')
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
 	<script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
 	<script src="/adminlte/plugins/select2/select2.full.min.js"></script>
 	<script src="/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
-
+	
 	<script>
 		$('#datepicker').datepicker({
 		  autoclose: true

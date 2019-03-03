@@ -4,8 +4,122 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1ad9efdfd2d7a4c283a18d35d81b464",
+    "content-hash": "f80bc74a2542f6130c01d569e2d43884",
     "packages": [
+        {
+            "name": "bkwld/croppa",
+            "version": "4.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BKWLD/croppa.git",
+                "reference": "2ca553795085f21b77829053a9da0d1221d6cd77"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BKWLD/croppa/zipball/2ca553795085f21b77829053a9da0d1221d6cd77",
+                "reference": "2ca553795085f21b77829053a9da0d1221d6cd77",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "4 - 5",
+                "illuminate/routing": "4 - 5",
+                "illuminate/support": "4 - 5",
+                "league/flysystem": "~1.0",
+                "php": ">=5.5.0",
+                "symfony/http-foundation": "2 - 4",
+                "symfony/http-kernel": "2 - 4",
+                "weotch/phpthumb": "^1.0.5"
+            },
+            "conflict": {
+                "league/flysystem-cached-adapter": "<1.0.2"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "4 - 5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bkwld\\Croppa\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "Croppa": "Bkwld\\Croppa\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Bkwld\\Croppa": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Reinhard"
+                }
+            ],
+            "description": "Image thumbnail creation through specially formatted URLs for Laravel",
+            "time": "2018-02-23T00:34:50+00:00"
+        },
+        {
+            "name": "blueimp/jquery-file-upload",
+            "version": "v9.28.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vkhramtsov/jQuery-File-Upload.git",
+                "reference": "ff5accfe2e5c4a522777faa980a90cf86a636d1d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vkhramtsov/jQuery-File-Upload/zipball/ff5accfe2e5c4a522777faa980a90cf86a636d1d",
+                "reference": "ff5accfe2e5c4a522777faa980a90cf86a636d1d",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "server/php/UploadHandler.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Tschan",
+                    "homepage": "https://blueimp.net"
+                }
+            ],
+            "description": "File Upload widget for jQuery.",
+            "homepage": "https://github.com/blueimp/jQuery-File-Upload",
+            "keywords": [
+                "bootstrap",
+                "chunk",
+                "cross-domain",
+                "cross-site",
+                "drag",
+                "drop",
+                "file",
+                "gae",
+                "go",
+                "jquery",
+                "multiple",
+                "php",
+                "preview",
+                "progress",
+                "python",
+                "resume",
+                "selection",
+                "upload",
+                "widget"
+            ],
+            "time": "2018-11-13T05:41:39+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",
@@ -411,6 +525,36 @@
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
             "time": "2017-06-27T22:17:23+00:00"
+        },
+        {
+            "name": "gargron/fileupload",
+            "version": "v1.4.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Gargron/fileupload.git",
+                "reference": "fd2b79c9b868b9987925e098f5562231e691ce7d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Gargron/fileupload/zipball/fd2b79c9b868b9987925e098f5562231e691ce7d",
+                "reference": "fd2b79c9b868b9987925e098f5562231e691ce7d",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "FileUpload\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "File uploading library capable of handling large/chunked/multiple file uploads",
+            "time": "2017-05-19T17:43:52+00:00"
         },
         {
             "name": "google/apiclient",
@@ -2455,16 +2599,16 @@
         },
         {
             "name": "spatie/laravel-permission",
-            "version": "2.34.0",
+            "version": "2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "10f6b2e19cce79936e42b65f08549cbf564c052e"
+                "reference": "c29eaa782e222299bd669feb37a39285c04f2ee4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/10f6b2e19cce79936e42b65f08549cbf564c052e",
-                "reference": "10f6b2e19cce79936e42b65f08549cbf564c052e",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/c29eaa782e222299bd669feb37a39285c04f2ee4",
+                "reference": "c29eaa782e222299bd669feb37a39285c04f2ee4",
                 "shasum": ""
             },
             "require": {
@@ -2475,7 +2619,7 @@
                 "php": ">=7.0"
             },
             "require-dev": {
-                "orchestra/testbench": "~3.4.2|~3.5.0|~3.6.0|~3.7.0|~3.8.0",
+                "orchestra/testbench": "~3.4.2|~3.5.0|~3.6.0|~3.7.0",
                 "phpunit/phpunit": "^5.7|6.2|^7.0",
                 "predis/predis": "^1.1"
             },
@@ -2516,7 +2660,7 @@
                 "security",
                 "spatie"
             ],
-            "time": "2019-02-26T21:25:08+00:00"
+            "time": "2019-03-01T19:52:03+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3626,6 +3770,41 @@
                 "environment"
             ],
             "time": "2019-01-29T11:11:52+00:00"
+        },
+        {
+            "name": "weotch/phpthumb",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/weotch/PHPThumb.git",
+                "reference": "f5c1d2ef2e9de3bded7483778618bf8cac2511c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/weotch/PHPThumb/zipball/f5c1d2ef2e9de3bded7483778618bf8cac2511c3",
+                "reference": "f5c1d2ef2e9de3bded7483778618bf8cac2511c3",
+                "shasum": ""
+            },
+            "replace": {
+                "dannytrue/phpthumb": "dev-master#2d8898f62e75a743e248dd5906a038d574e0dfe0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Reinhard"
+                }
+            ],
+            "description": "Fork of PHPThumb that adds auto-image rotation based on EXIF data and composer support",
+            "time": "2015-05-12T22:56:19+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",

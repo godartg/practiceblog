@@ -20,7 +20,7 @@ Route::group([
 	'middleware' => 'auth'], 
 	function (){
 	Route::get('/','AdminController@index')->name('dashboard');
-	Route::post('upload', 'GoogleDriveController@uploadFile')->name('admin.upload');
+	Route::post('upload', 'GoogleDriveController@doUpload',['as' => 'admin'])->name('admin.upload');
 	Route::resource('posts','PostsController',['except' => 'show', 'as' => 'admin']);
 	Route::resource('users','UsersController',['as' => 'admin']);
 	Route::middleware('role:Admin')

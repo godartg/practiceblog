@@ -1,11 +1,13 @@
 @push('styles')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/blueimp-gallery/2.27.1/css/blueimp-gallery.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/css/jquery.fileupload.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/css/jquery.fileupload-ui.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.28.0/css/jquery.fileupload.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.28.0/css/jquery.fileupload-ui.min.css">
 @endpush
-
+@if (DB::table('social_networks')->whereIn('user_id', [auth()->user()->id])->get()->isNotEmpty())
 <div class="form-group">
     <form id="fileupload" action="{{ route('admin.upload') }}" method="post" enctype="multipart/form-data">
+        @csrf
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
             <div class="col-lg-7">
@@ -56,34 +58,38 @@
         <ol class="indicator"></ol>
     </div>
 </div>
-
+@else
+	<div class="form-group">
+	    <a class="btn btn-success" href="{{route('login.google')}}">Agregar Cuenta Drive</a>
+	</div>
+@endif
 @push('scripts')
     @include('admin.partials.x-template')
-    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/vendor/jquery.ui.widget.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.28.0/js/vendor/jquery.ui.widget.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-JavaScript-Templates/3.11.0/js/tmpl.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-load-image/2.17.0/load-image.all.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.14.0/js/canvas-to-blob.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-gallery/2.27.1/js/jquery.blueimp-gallery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/jquery.iframe-transport.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/jquery.fileupload.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/jquery.fileupload-process.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/jquery.fileupload-image.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/jquery.fileupload-validate.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/jquery.fileupload-ui.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.28.0/js/jquery.iframe-transport.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.28.0/js/jquery.fileupload.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.28.0/js/jquery.fileupload-process.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.28.0/js/jquery.fileupload-image.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.28.0/js/jquery.fileupload-validate.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.28.0/js/jquery.fileupload-ui.min.js"></script>
     <script>
         // Enable iframe cross-domain access via redirect option:
-		$(function(){
-    'use strict';
+	$(function(){
+        'use strict';
 
-    // set the csrf-token for all AJAX requests
-    $.ajaxSetup({
-        headers: {
+        // set the csrf-token for all AJAX requests
+        $.ajaxSetup({
+            headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
-    });
+        });
 
-    // fileupload() related actions
-    if ($().fileupload) {
+        // fileupload() related actions
+        if ($().fileupload) {
         
         // Initialize the jQuery File Upload widget:
         $('#fileupload').fileupload({
@@ -114,6 +120,7 @@
         $.ajax({
             // Uncomment the following to send cross-domain cookies:
             //xhrFields: {withCredentials: true},
+            type: 'POST',
             url: $('#fileupload').fileupload('option', 'url'),
             dataType: 'json',
             context: $('#fileupload')[0]
@@ -123,7 +130,7 @@
             $(this).fileupload('option', 'done')
                 .call(this, $.Event('done'), {result: result});
         });
-    }
-});
+        }
+    });
     </script>
 @endpush
