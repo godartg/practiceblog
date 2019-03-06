@@ -20,7 +20,10 @@ Route::group([
 	'middleware' => 'auth'], 
 	function (){
 	Route::get('/','AdminController@index')->name('dashboard');
-	Route::post('upload', 'GoogleDriveController@doUpload',['as' => 'admin'])->name('admin.upload');
+	Route::get('drive/upload/{post}', 'GoogleDriveController@formulario')->name('drive.upload');
+	Route::get('drive/index/{post}', 'GoogleDriveController@index')->name('admin.photos.index');
+	Route::post('drive', 'GoogleDriveController@store')->name('admin.photos.store');
+	Route::delete('destroy/{photo}','GoogleDriveController@destroy')->name('admin.photos.destroy');
 	Route::resource('posts','PostsController',['except' => 'show', 'as' => 'admin']);
 	Route::resource('users','UsersController',['as' => 'admin']);
 	Route::middleware('role:Admin')
@@ -31,8 +34,6 @@ Route::group([
 		->name('admin.users.permissions.update');
 
 	Route::post('posts/{post}/photos','PhotosController@store')->name('admin.posts.photos.store');
-	Route::delete('photos/{photo}','PhotosController@destroy')->name('admin.photos.destroy');
-
 });
 
 //Rutas de autenticación con redes sociales

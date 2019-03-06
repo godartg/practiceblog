@@ -17,28 +17,6 @@
 @section('content')
 
 <div class="row">
-	@if ($post->photos->count())
-		<div class="col-md-12">
-			<div class="box box-primary">
-				<div class="box-body">
-					<div class="row">
-						@foreach ($post->photos as $photo)
-						<form method="POST" action="{{ route('admin.photos.destroy',$photo) }}">
-							{{ method_field('DELETE') }}  {{ csrf_field() }}
-	 						<div class="col-md-2">
-								<button class="btn btn-xs btn-danger" style="position: absolute;">
-									<i class="fa fa-remove"></i>
-								</button>
-								<img class="img-responsive" src="/storage/app/public/{{ $photo->url }}">
-							</div>
-						</form>
-						@endforeach
-					</div>
-				</div>
-			</div>
-		</div>
-	@endif
-	
 
 	<form method="POST" action="{{ route('admin.posts.update',$post) }}">
 	@csrf @method('PUT')
@@ -117,7 +95,11 @@
 	                </select>
 	                {!! $errors->first('tags','<span class="help-block">:message</span>') !!}
               	</div>
-
+				<div class="form-group">
+				<a href="{{route('drive.upload', $post)}}" class="btn btn-success">
+					Agregar fotos
+				</a>
+				</div>
 				<div class="form-group {{ $errors->has('excerpt')? 'has-error': '' }}">
 					<label>Extracto de la publicación</label>
 					<textarea 
@@ -133,7 +115,7 @@
 		</div>
 	</div>
 	</form>
-	@include('admin.posts.upload')
+	
 </div>
 @stop
 

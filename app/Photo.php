@@ -12,7 +12,7 @@ class Photo extends Model
      * @var array
      */
     protected $fillable = [
-        'post_id', 'url',
+        'name','post_id', 'url',
     ];
     /**
      * The attributes that should be mutated to dates.

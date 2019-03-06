@@ -12,7 +12,4 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .copy('vendor/blueimp/jquery-file-upload/js/jquery.fileupload.js', 'public/js')
-   .copy('vendor/blueimp/jquery-file-upload/js/jquery.iframe-transport.js', 'public/js')
-   .copy('vendor/blueimp/jquery-file-upload/js/vendor/jquery.ui.widget.js', 'public/js/vendor')
    .sass('resources/assets/sass/app.scss', 'public/css');
