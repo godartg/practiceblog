@@ -32,10 +32,6 @@ Route::group([
 		->name('admin.users.permissions.update');
 });
 
-Route::middleware('auth')->group(function(){
-    Route::get('/api', 'GoogleDriveController@getFolders')->name('google.folders');
-    Route::get('/api/upload', 'GoogleDriveController@uploadFiles');
-});
 //Rutas de autenticación con redes sociales
 Route::get('login/google', 'SocialAuthController@redirectToGoogleProvider')->name('login.google');
 Route::get('login/google/callback', 'SocialAuthController@handleProviderGoogleCallback');

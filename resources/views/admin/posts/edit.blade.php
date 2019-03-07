@@ -150,6 +150,7 @@
 	<script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
 	<script src="/adminlte/plugins/select2/select2.full.min.js"></script>
 	<script src="/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
+	
 	<script>
 		$('#datepicker').datepicker({
 		  autoclose: true
@@ -168,23 +169,22 @@
 		   paramName: 'photo',
 		   acceptedFiles: 'image/*',
 		   maxFilesize: 2,
+		   uploadMultiple:true,
 		   headers: {
 		   		'X-CSRF-TOKEN': '{{ csrf_token() }}'
 		   },
 		   dictDefaultMessage: 'Arrastra aqui las imagenes para subirlas'
 		});
-
+		
 		myDropzone.on('error', function(file,res){
 			var msg = res.errors.photo[0];
 			$('.dz-error-message:last > span').text(msg);
 		});
-
 		Dropzone.autoDiscover = false;
 		
 		/*para que dropzone no lo inicialice se usa: dropzone autodiscover = false (fuera de la inicializacion)
 		//maxFilesize esa dado en MB paramName cambia el valor del nombre del parametro,
 		maxFiles:1, hace que la cantidad maxima de archivos a subir en el servidor sea uno */
 
-
-</script>
+	</script>
 @endpush

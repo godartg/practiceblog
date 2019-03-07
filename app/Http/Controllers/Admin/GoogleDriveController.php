@@ -1,16 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Exception;
 use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Drive_DriveFile;
 use App\SocialNetwork;
+use App\Post;
+use App\Photo;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+
 
 class GoogleDriveController extends Controller
 {
@@ -58,35 +62,7 @@ class GoogleDriveController extends Controller
     function createStorageFile($storage_path){
         $this->createFile($storage_path);
     }
- 
-    function createFile($file, $parent_id = null){
-        $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
-        $fileMetadata = new Google_Service_Drive_DriveFile([
-            'name' => $name,
-            'parent' => $parent_id ? $parent_id : 'root'
-        ]);
- 
-        $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
-        $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
- 
-        $file = $this->drive->files->create($fileMetadata, [
-            'data' => $content,
-            'mimeType' => $mimeType,
-            'uploadType' => 'multipart',
-            'fields' => 'id'
-        ]);
- 
-        dd($file->id);
-    }
- 
-    function deleteFileOrFolder($id){
-        try {
-            $this->drive->files->delete($id);
-        } catch (Exception $e) {
-            return false;
-        }
-    }
- 
+
     function createFolder($folder_name){
         $folder_meta = new Google_Service_Drive_DriveFile(array(
             'name' => $folder_name,
@@ -94,6 +70,58 @@ class GoogleDriveController extends Controller
         $folder = $this->drive->files->create($folder_meta, array(
             'fields' => 'id'));
         return $folder->id;
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    function store(Post $post){
+        $this->validate(request(),[
+    		'photo' => 'required|image|max:2048'
+    	]);
+        dd($post);
+        
+    	// return request()->file('photo')->store('posts','public');
+        // $photoUrl = Storage::url($photo);
+        $parent_id= 'practiceblog';
+        foreach($post->photos() as $photo){
+            $file= $request()->file('photo');
+            $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
+            $fileMetadata = new Google_Service_Drive_DriveFile([
+                'name' => $name,
+                'parent' => $parent_id ? $parent_id : 'root'
+            ]);
+    
+            $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
+            $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
+    
+            $file = $this->drive->files->create($fileMetadata, [
+                'data' => $content,
+                'mimeType' => $mimeType,
+                'uploadType' => 'multipart',
+                'fields' => 'id'
+            ]);
+            $photo->url= 'https://drive.google.com/open?id='.$file->id;
+        }    
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Photo  $photo
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Photo $photo)
+    {
+        try {
+            $this->drive->files->delete($photo->id);
+            $photo->delete(); // delete db record
+            return back()->with('flash','Foto eliminada');
+        } catch (Exception $e) {
+            return false;
+        }    
     }
 }
 /* jpeg, png, bmp, gif, o svg, el maximo en kilobytes, tambien se pueden validar dimensioes con: 

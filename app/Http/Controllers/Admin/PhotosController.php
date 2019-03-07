@@ -6,7 +6,7 @@ use App\Post;
 use App\Photo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\GoogleDriverController;
+
 
 class PhotosController extends Controller
 {
