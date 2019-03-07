@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 
 class GoogleDriveController extends Controller
@@ -78,32 +79,33 @@ class GoogleDriveController extends Controller
      * @return \Illuminate\Http\Response
      */
     function store(Post $post){
-        
-        $parent_id= 'practiceblog';
-        $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
-        $fileMetadata = new Google_Service_Drive_DriveFile([
-            'name' => $name,
-            'parent' => $parent_id ? $parent_id : 'root'
-        ]);
- 
-        $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
-        $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
- 
-        $file = $this->drive->files->create($fileMetadata, [
-            'data' => $content,
-            'mimeType' => $mimeType,
-            'uploadType' => 'multipart',
-            'fields' => 'id'
-        ]);
         $this->validate(request(),[
     		'photo' => 'required|image|max:2048'
     	]);
+        dd($post);
+        
     	// return request()->file('photo')->store('posts','public');
         // $photoUrl = Storage::url($photo);
-        
-        $post->photos()->create([
-    		'url' => 'https://drive.google.com/open?id='.$file->id,
-        ]);    
+        $parent_id= 'practiceblog';
+        foreach($post->photos() as $photo){
+            $file= $request()->file('photo');
+            $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
+            $fileMetadata = new Google_Service_Drive_DriveFile([
+                'name' => $name,
+                'parent' => $parent_id ? $parent_id : 'root'
+            ]);
+    
+            $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
+            $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
+    
+            $file = $this->drive->files->create($fileMetadata, [
+                'data' => $content,
+                'mimeType' => $mimeType,
+                'uploadType' => 'multipart',
+                'fields' => 'id'
+            ]);
+            $photo->url= 'https://drive.google.com/open?id='.$file->id;
+        }    
     }
     /**
      * Remove the specified resource from storage.

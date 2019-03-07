@@ -29,7 +29,7 @@
 								<button class="btn btn-xs btn-danger" style="position: absolute;">
 									<i class="fa fa-remove"></i>
 								</button>
-								<img class="img-responsive" src="/storage/{{ $photo->url }}">
+								<img class="img-responsive" src="{{ $photo->url }}">
 							</div>
 						</form>
 						@endforeach
@@ -169,6 +169,7 @@
 		   paramName: 'photo',
 		   acceptedFiles: 'image/*',
 		   maxFilesize: 2,
+		   uploadMultiple:true,
 		   headers: {
 		   		'X-CSRF-TOKEN': '{{ csrf_token() }}'
 		   },

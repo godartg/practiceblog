@@ -30,8 +30,6 @@ Route::group([
 	Route::middleware('role:Admin')
 		->put('users/{user}/permissions','UsersPermissionsController@update')
 		->name('admin.users.permissions.update');
-
-	Route::post('posts/{post}/photos','PhotosController@store')->name('admin.posts.photos.store');
 });
 
 //Rutas de autenticación con redes sociales
