@@ -6,20 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Photo extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    
     protected $fillable = [
-        'name','post_id', 'url',
+        'post_id', 'url', 
     ];
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at', 'updated_at',
-    ];
+    protected static function boot()
+    {
+        parent::boot();
+        
+    	static::deleting(function($photo){
+            //
+            $photo->detach();
+            $photo->each->delete();
+    	});
+    }
+    public function owner()
+    {
+        return $this->belongsTo(Post::class,'post_id');
+    }
 }

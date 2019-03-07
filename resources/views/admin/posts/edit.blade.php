@@ -17,7 +17,27 @@
 @section('content')
 
 <div class="row">
-
+	@if ($post->photos->count())
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-body">
+					<div class="row">
+						@foreach ($post->photos as $photo)
+						<form method="POST" action="{{ route('admin.photos.destroy',$photo) }}">
+							{{ method_field('DELETE') }}  {{ csrf_field() }}
+	 						<div class="col-md-2">
+								<button class="btn btn-xs btn-danger" style="position: absolute;">
+									<i class="fa fa-remove"></i>
+								</button>
+								<img class="img-responsive" src="/storage/{{ $photo->url }}">
+							</div>
+						</form>
+						@endforeach
+					</div>
+				</div>
+			</div>
+		</div>
+	@endif
 	<form method="POST" action="{{ route('admin.posts.update',$post) }}">
 	@csrf @method('PUT')
 	<div class="col-md-8">
@@ -95,11 +115,7 @@
 	                </select>
 	                {!! $errors->first('tags','<span class="help-block">:message</span>') !!}
               	</div>
-				<div class="form-group">
-				<a href="{{route('drive.upload', $post)}}" class="btn btn-success">
-					Agregar fotos
-				</a>
-				</div>
+				
 				<div class="form-group {{ $errors->has('excerpt')? 'has-error': '' }}">
 					<label>Extracto de la publicación</label>
 					<textarea 
@@ -107,6 +123,9 @@
 						class="md-textarea form-control" 
 						placeholder="Ingresa un extracto o resumen de la publicación">{{ old('excerpt',$post->excerpt) }}</textarea>
 					{!! $errors->first('excerpt','<span class="help-block">:message</span>') !!}
+				</div>
+				<div class="form-group">
+					<div class="dropzone"></div>
 				</div>
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-block">Guardar publicación</button>
@@ -120,13 +139,14 @@
 @stop
 
 @push('styles')
-
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css">
 	<link rel="stylesheet" href="/adminlte/plugins/select2/select2.min.css">
 	<link rel="stylesheet" href="/adminlte/plugins/datepicker/datepicker3.css">
   	<link rel="stylesheet" href="/adminlte/plugins/datatables/dataTables.bootstrap.css">
 
 @endpush
 @push('scripts')
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
 	<script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
 	<script src="/adminlte/plugins/select2/select2.full.min.js"></script>
 	<script src="/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
@@ -144,35 +164,26 @@
 
 		CKEDITOR.config.height = 315;
 		
-		$(function(){
-			'use strict';
-
-			// set the csrf-token for all AJAX requests
-			$.ajaxSetup({
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				}
-			});
-
-			// fileupload() related actions
-			if ($().fileupload) {
-				
-				// Initialize the jQuery File Upload widget:
-				$('#fileupload').fileupload({
-					// Uncomment the following to send cross-domain cookies:
-					//xhrFields: {withCredentials: true},
-					url: $('#fileupload').attr('action'),
-					// Enable image resizing, except for Android and Opera,
-					// which actually support image resizing, but fail to
-					// send Blob objects via XHR requests:
-					disableImageResize: /Android(?!.*Chrome)|Opera/
-						.test(window.navigator.userAgent),
-					maxFileSize: 2000000,
-					acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
-				});
-
-				
-			}
+		var myDropzone = new Dropzone('.dropzone',{
+		   url: '/admin/posts/{{ $post->url }}/photos',
+		   paramName: 'photo',
+		   acceptedFiles: 'image/*',
+		   maxFilesize: 2,
+		   headers: {
+		   		'X-CSRF-TOKEN': '{{ csrf_token() }}'
+		   },
+		   dictDefaultMessage: 'Arrastra aqui las imagenes para subirlas'
 		});
+		
+		myDropzone.on('error', function(file,res){
+			var msg = res.errors.photo[0];
+			$('.dz-error-message:last > span').text(msg);
+		});
+		Dropzone.autoDiscover = false;
+		
+		/*para que dropzone no lo inicialice se usa: dropzone autodiscover = false (fuera de la inicializacion)
+		//maxFilesize esa dado en MB paramName cambia el valor del nombre del parametro,
+		maxFiles:1, hace que la cantidad maxima de archivos a subir en el servidor sea uno */
+
 	</script>
 @endpush

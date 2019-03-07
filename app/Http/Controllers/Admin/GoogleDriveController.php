@@ -9,9 +9,6 @@ use Google_Service_Drive_DriveFile;
 use App\SocialNetwork;
 use App\Post;
 use App\Photo;
-use Croppa;
-use File;
-use FileUpload;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,89 +25,85 @@ class GoogleDriveController extends Controller
             return $next($request);     
         });
     }
-    public function formulario(Post $post){
-        
-        return view('admin.posts.upload',['post_id'=>$post->id]);
+    public function getDrive(){
+        $this->ListFolders('root');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Post $post)
-    {
-        // get all photos
-        $photos = Photo::all();
-        
-        // add properties to photos
-        $photos->map(function ($photo) {
-            $photo['size'] = File::size(public_path($photo['url']));
-            $photo['thumbnailUrl'] = Croppa::url($photo['url'], 80, 80, ['resize']);
-            $photo['deleteType'] = 'DELETE';
-            $photo['deleteUrl'] = route('admin.photos.destroy', $photo->id);
-            return $photo;
-        });
-        
-        // show all photos
-        return response()->json(['files' => $photos]);
+ 
+    public function ListFolders($id){
+ 
+        $query = "mimeType='application/vnd.google-apps.folder' and '".$id."' in parents and trashed=false";
+ 
+        $optParams = [
+            'fields' => 'files(id, name)',
+            'q' => $query
+        ];
+ 
+        $results = $this->drive->files->listFiles($optParams);
+ 
+        if (count($results->getFiles()) == 0) {
+            print "No files found.\n";
+        } else {
+            print "Files:\n";
+            foreach ($results->getFiles() as $file) {
+                dump($file->getName(), $file->getID());
+            }
+        }
     }
+ 
+    function uploadFile(Request $request){
+        if($request->isMethod('GET')){
+            return view('upload');
+        }else{
+            $this->createFile($request->file('file'));
+        }
+    }
+ 
+    function createStorageFile($storage_path){
+        $this->createFile($storage_path);
+    }
+
+    function createFolder($folder_name){
+        $folder_meta = new Google_Service_Drive_DriveFile(array(
+            'name' => $folder_name,
+            'mimeType' => 'application/vnd.google-apps.folder'));
+        $folder = $this->drive->files->create($folder_meta, array(
+            'fields' => 'id'));
+        return $folder->id;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    function store(Request $request){
-        dd($request);
-        $file= $request->file('file'); 
+    function store(Post $post){
         
-        $parent_id = 'practiceblog';
+        $parent_id= 'practiceblog';
+        $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
+        $fileMetadata = new Google_Service_Drive_DriveFile([
+            'name' => $name,
+            'parent' => $parent_id ? $parent_id : 'root'
+        ]);
+ 
+        $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
+        $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
+ 
+        $file = $this->drive->files->create($fileMetadata, [
+            'data' => $content,
+            'mimeType' => $mimeType,
+            'uploadType' => 'multipart',
+            'fields' => 'id'
+        ]);
+        $this->validate(request(),[
+    		'photo' => 'required|image|max:2048'
+    	]);
+    	// return request()->file('photo')->store('posts','public');
+        // $photoUrl = Storage::url($photo);
         
-        $fileupload = new FileUpload\FileUpload($_FILES['files'], $_SERVER);
-       // Doing the deed
-        list($files, $headers) = $fileupload->processAll();
-        foreach($files as $file){
-            //Remember to check if the upload was completed
-            if ($file->completed) {
-                $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
-                
-                $fileMetadata = new Google_Service_Drive_DriveFile([
-                    'name' => $name,
-                    'parent' => $parent_id ? $parent_id : 'root'
-                ]);
-                
-                $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
-                $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
-                $file = $this->drive->files->create($fileMetadata, [
-                    'data' => $content,
-                    'mimeType' => $mimeType,
-                    'uploadType' => 'multipart',
-                    'fields' => 'id'
-                ]);
-                // save data
-
-                //$photo= $request->post->photo()->create([
-                //    'url' => 'https://drive.google.com/open?id='. $file->id,
-                //]);
-                $photo= Photo::create(['post_id' => $request->post->id(), 
-                    'url' =>'https://drive.google.com/open?id='. $file->id ]);
-                // prepare response
-                $data[] = [
-                    'size' => $file->size,
-                    'name' => $filename,
-                    'url' => $url,
-                    'thumbnailUrl' => Croppa::url($url, 80, 80, ['resize']),
-                    'deleteType' => 'DELETE',
-                    'deleteUrl' => route('admin.photos.destroy', $photo->id),
-                ];
-                
-                // output uploaded file response
-                return response()->json(['files' => $data]);
-            }
-        }
-        // errors, no uploaded file
-        return response()->json(['files' => $files]);
-        
+        $post->photos()->create([
+    		'url' => 'https://drive.google.com/open?id='.$file->id,
+        ]);    
     }
     /**
      * Remove the specified resource from storage.
@@ -120,9 +113,15 @@ class GoogleDriveController extends Controller
      */
     public function destroy(Photo $photo)
     {
-        Croppa::delete($photo->url); // delete file and thumbnail(s)
-        $photo->delete(); // delete db record
-        return response()->json([$photo->url]);
+        try {
+            $this->drive->files->delete($photo->id);
+            $photo->delete(); // delete db record
+            return back()->with('flash','Foto eliminada');
+        } catch (Exception $e) {
+            return false;
+        }    
     }
-
 }
+/* jpeg, png, bmp, gif, o svg, el maximo en kilobytes, tambien se pueden validar dimensioes con: 
+dimensions:min_width=500,max_width=1500,min_height=100,laravel convierte a $photo = request()->file('photo') en una instancia de la clase Uploatedfile para luego usar el metodo storage que guarda el archivo en la carpeta storage
+*/
