@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Spatie\Permission\Models\Role;
 use App\SocialNetwork;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +16,7 @@ class SocialAuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin';
+    protected $redirectTo = '/home';
     
     
     public function redirectToGoogleProvider(){
@@ -27,13 +26,12 @@ class SocialAuthController extends Controller
                                         ->redirect();
     }
     public function handleProviderGoogleCallback(){
-        $adminRole = [ 'name' => 'Admin' ];
+        
         $socialUser = Socialite::driver('google')->stateless()->user();
         
         if(!Auth::check()){
             $user = User::updateOrCreate(['name'=>  $socialUser->name,
                                         'email'=>   $socialUser->email]);
-            $user->assignRole($adminRole);
             $socialNetwork = SocialNetwork::updateOrCreate(['email'   =>  $socialUser->email],
                                         ['refresh_token'=>  $socialUser->token,
                                         'provider_id' => $socialUser->getId(),
