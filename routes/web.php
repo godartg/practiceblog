@@ -20,7 +20,8 @@ Route::group([
 	'middleware' => 'auth'], 
 	function (){
 	Route::get('/','AdminController@index')->name('dashboard');
-	Route::post('posts/{post}/photos','GoogleDriveController@store')->name('admin.posts.photos.store');
+	//Route::post('posts/{post}/photos','GoogleDriveController@store')->name('admin.posts.photos.store');
+	Route::post('posts/{post}/photos','GoogleDriveController@uploadFile')->name('admin.posts.photos.store');
 	Route::delete('photos/{photo}','GoogleDriveController@destroy')->name('admin.photos.destroy');
 	Route::resource('posts','PostsController',['except' => 'show', 'as' => 'admin']);
 	Route::resource('users','UsersController',['as' => 'admin']);

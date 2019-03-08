@@ -51,11 +51,11 @@ class GoogleDriveController extends Controller
         }
     }
  
-    function uploadFile(Request $request){
+    function uploadFile(Post $post, Request $request){
         if($request->isMethod('GET')){
             return view('upload');
         }else{
-            $this->createFile($request->file('file'));
+            $this->createFile($post, $request->file('photo'));
         }
     }
  
@@ -71,7 +71,30 @@ class GoogleDriveController extends Controller
             'fields' => 'id'));
         return $folder->id;
     }
+    function createFile($post, $file){
+        $this->validate(request(),[
+    		'photo' => 'required|image|max:2048'
+    	]);
+        $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
+        $fileMetadata = new Google_Service_Drive_DriveFile([
+            'name' => $name,
+            'parent' => $parent_id ? $parent_id : 'root'
+        ]);
 
+        $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
+        $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
+
+        $file = $this->drive->files->create($fileMetadata, [
+            'data' => $content,
+            'mimeType' => $mimeType,
+            'uploadType' => 'multipart',
+            'fields' => 'id'
+        ]);
+        $post->photos()->create([
+    		'url' => $file->id,
+        ]);
+        dd($file->id);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -82,8 +105,7 @@ class GoogleDriveController extends Controller
         $this->validate(request(),[
     		'photo' => 'required|image|max:2048'
     	]);
-        dd($post);
-        
+
     	// return request()->file('photo')->store('posts','public');
         // $photoUrl = Storage::url($photo);
         $parent_id= 'practiceblog';
