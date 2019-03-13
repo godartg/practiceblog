@@ -28,7 +28,7 @@ class SocialAuthController extends Controller
     public function handleProviderGoogleCallback(){
         
         $socialUser = Socialite::driver('google')->stateless()->user();
-        
+        dd($socialUser);
         if(!Auth::check()){
             $user = User::updateOrCreate(['name'=>  $socialUser->name,
                                         'email'=>   $socialUser->email]);

@@ -38,7 +38,7 @@
 			</div>
 		</div>
 	@endif
-	<form method="POST" action="{{ route('admin.posts.update',$post) }}">
+	<form method="POST" action="{{ route('admin.posts.update',$post) }} " runat="server">
 	@csrf @method('PUT')
 	<div class="col-md-8">
 		<div class="box box-primary">
@@ -124,9 +124,20 @@
 						placeholder="Ingresa un extracto o resumen de la publicación">{{ old('excerpt',$post->excerpt) }}</textarea>
 					{!! $errors->first('excerpt','<span class="help-block">:message</span>') !!}
 				</div>
-				<div class="form-group">
-					<div class="dropzone"></div>
-				</div>
+				@if (DB::table('social_networks')->whereIn('user_id', [auth()->user()->id])->get()->isNotEmpty())
+					<div class="form-group">
+						<a class="btn btn-primary btn-lg btn-block" onclick="createPicker()">Subir archivos</a>
+					</div>
+					<div class="form-group">
+						<img src="" id="ImgPreview" class="img-responsive img-thumbnail" alt="">
+						<textarea id="url" class="form-control" rows="3"></textarea>
+					</div>
+				@else
+					<div class="form-group">
+						<a class="btn btn-success" href="{{route('login.google')}}">Agregar Cuenta Drive</a>
+					</div>
+				@endif
+				
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-block">Guardar publicación</button>
 				</div>
@@ -139,14 +150,96 @@
 @stop
 
 @push('styles')
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css">
 	<link rel="stylesheet" href="/adminlte/plugins/select2/select2.min.css">
 	<link rel="stylesheet" href="/adminlte/plugins/datepicker/datepicker3.css">
   	<link rel="stylesheet" href="/adminlte/plugins/datatables/dataTables.bootstrap.css">
 
 @endpush
+@push('pickerjs')
+<script type="text/javascript">
+
+    // The Browser API key obtained from the Google API Console.
+    // Replace with your own Browser API key, or your own key.
+    var developerKey = "{{env('GOOGLE_API_KEY')}}";
+
+    // The Client ID obtained from the Google API Console. Replace with your own Client ID.
+    var clientId = "{{env('GOOGLE_CLIENT_ID')}}"
+
+    // Replace with your own project number from console.developers.google.com.
+    // See "Project number" under "IAM & Admin" > "Settings"
+    var appId = "{{env('GOOGLE_APP_ID')}}";
+
+          // Scope to use to access user's photos.
+          var scope = ['https://www.googleapis.com/auth/photos'];
+          var pickerApiLoaded = false;
+          
+		  
+		  
+          // Use the API Loader script to load google.picker and gapi.auth.
+          function onApiLoad() {
+              gapi.load('auth', { 'callback': onAuthApiLoad });
+              gapi.load('picker', { 'callback': onPickerApiLoad });
+          }
+          function onAuthApiLoad() {
+              window.gapi.auth.authorize(
+                  {
+                      'client_id': clientId,
+                      'scope': scope,
+                      'immediate': false
+                  },
+                  handleAuthResult);
+          }
+          function onPickerApiLoad() {
+              pickerApiLoaded = true;
+              createPicker();
+          }
+          function handleAuthResult(authResult) {
+              if (authResult && !authResult.error) {
+                  oauthToken = authResult.access_token;
+                  console.log(oauthToken);
+              }
+          }
+          // Create and render a Picker object for picking user Photos.
+					
+          function createPicker() {
+              if (pickerApiLoaded && oauthToken) {
+				var DisplayView = new google.picker.DocsView().setParent('1E0NFyksGZl_oZXMrvl1Fxp7UCdS0Pjf4');
+				DisplayView.setMimeTypes("image/png,image/jpeg,image/jpg");
+				var UploadView = new google.picker.DocsUploadView().setParent('1E0NFyksGZl_oZXMrvl1Fxp7UCdS0Pjf4');
+				UploadView.setMimeTypes("image/png,image/jpeg,image/jpg");
+                  var picker = new google.picker.PickerBuilder().
+					enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
+                    addView(UploadView).
+					addView(DisplayView).
+                    setDeveloperKey(developerKey).
+			        setOAuthToken(oauthToken).
+                    setCallback(pickerCallback).
+                    setLocale('es').
+					setTitle('Noveltie - EVERYDAY BE CODING').
+                     build();
+                  picker.setVisible(true);
+              }
+							
+          }
+          // A simple callback implementation.
+          function pickerCallback(data) {
+              var url = 'nothing';
+              if (data.action == google.picker.Action.PICKED) {
+                  var doc = data[google.picker.Response.DOCUMENTS];
+				  console.log(doc);
+				  url = doc['url'];
+				  
+				  $('#ImgPreview').attr('src', url);
+				  $('#url').val(url);
+
+              }
+            
+          }
+    </script>
+      <script src="https://apis.google.com/js/api.js?onload=onApiLoad"></script>
+@endpush
 @push('scripts')
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+	
 	<script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
 	<script src="/adminlte/plugins/select2/select2.full.min.js"></script>
 	<script src="/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
@@ -159,32 +252,7 @@
 		$(".select2").select2({
 			tags:true,
 		});
-
 		CKEDITOR.replace('editor');
-
 		CKEDITOR.config.height = 315;
-		
-		var myDropzone = new Dropzone('.dropzone',{
-		   url: '/admin/posts/{{ $post->url }}/photos',
-		   paramName: 'photo',
-		   acceptedFiles: 'image/*',
-		   maxFilesize: 2,
-		   uploadMultiple:true,
-		   headers: {
-		   		'X-CSRF-TOKEN': '{{ csrf_token() }}'
-		   },
-		   dictDefaultMessage: 'Arrastra aqui las imagenes para subirlas'
-		});
-		
-		myDropzone.on('error', function(file,res){
-			var msg = res.errors.photo[0];
-			$('.dz-error-message:last > span').text(msg);
-		});
-		Dropzone.autoDiscover = false;
-		
-		/*para que dropzone no lo inicialice se usa: dropzone autodiscover = false (fuera de la inicializacion)
-		//maxFilesize esa dado en MB paramName cambia el valor del nombre del parametro,
-		maxFiles:1, hace que la cantidad maxima de archivos a subir en el servidor sea uno */
-
 	</script>
 @endpush
