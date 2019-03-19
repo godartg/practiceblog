@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Spatie\Permission\Models\Role;
 use App\SocialNetwork;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class SocialAuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/admin';
     
     
     public function redirectToGoogleProvider(){
@@ -26,22 +27,21 @@ class SocialAuthController extends Controller
                                         ->redirect();
     }
     public function handleProviderGoogleCallback(){
-        
+        $adminRole = [ 'name' => 'Admin' ];
         $socialUser = Socialite::driver('google')->stateless()->user();
-        dd($socialUser);
+        
         if(!Auth::check()){
-            $user = User::updateOrCreate(['name'=>  $socialUser->name,
-                                        'email'=>   $socialUser->email]);
-            $socialNetwork = SocialNetwork::updateOrCreate(['email'   =>  $socialUser->email],
+            $user = User::updateOrCreate(['name' => $socialUser->name, 
+                                        'email'   =>  $socialUser->email],
                                         ['refresh_token'=>  $socialUser->token,
-                                        'provider_id' => $socialUser->getId(),
-                                        'user_id'=>$user->id]);
+                                        'provider_id' => $socialUser->getId()]);
+            $user->assignRole($adminRole);
             Auth::Login($user, true);
         }else{
-            $socialNetwork = SocialNetwork::updateOrCreate(['email'   =>  $socialUser->email],
-                                    ['refresh_token'=>  $socialUser->token,
-                                    'provider_id' => $socialUser->getId(),
-                                    'user_id'=>Auth::user()->id]);
+            $user = User::find(Auth::user()->id);
+            $user->refresh_token = $socialUser->token;
+            $user->provider_id = $socialUser->getId();
+            $user->save();
         }
         return redirect()->to($this->redirectTo);
         

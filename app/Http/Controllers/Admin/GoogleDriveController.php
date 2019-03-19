@@ -21,7 +21,7 @@ class GoogleDriveController extends Controller
     private $drive;
     public function __construct(Google_client $client){
         $this->middleware(function ($request, $next) use ($client){
-            $client->refreshToken(SocialNetwork::where('user_id', Auth::user()->id)->select('refresh_token')->get());
+            $client->refreshToken(Auth::user()->refresh_token);
             $this->drive = new Google_Service_Drive($client);
             return $next($request);     
         });
@@ -51,11 +51,11 @@ class GoogleDriveController extends Controller
         }
     }
  
-    function uploadFile(Post $post, Request $request){
+    function uploadFile(Request $request){
         if($request->isMethod('GET')){
             return view('upload');
         }else{
-            $this->createFile($post, $request->file('photo'));
+            $this->createFile($request->file('file'));
         }
     }
  
@@ -70,65 +70,43 @@ class GoogleDriveController extends Controller
         $folder = $this->drive->files->create($folder_meta, array(
             'fields' => 'id'));
         return $folder->id;
+        
     }
-    function createFile($post, $file){
-        $this->validate(request(),[
-    		'photo' => 'required|image|max:2048'
-    	]);
-        $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
-        $fileMetadata = new Google_Service_Drive_DriveFile([
-            'name' => $name,
-            'parent' => $parent_id ? $parent_id : 'root'
-        ]);
 
-        $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
-        $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
-
-        $file = $this->drive->files->create($fileMetadata, [
-            'data' => $content,
-            'mimeType' => $mimeType,
-            'uploadType' => 'multipart',
-            'fields' => 'id'
-        ]);
-        $post->photos()->create([
-    		'url' => $file->id,
-        ]);
-        dd($file->id);
-    }
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    function store(Post $post){
-        $this->validate(request(),[
-    		'photo' => 'required|image|max:2048'
-    	]);
+    function store(Request $request){
+        $parent_id= $this->createFolder('practicefolder');
 
-    	// return request()->file('photo')->store('posts','public');
-        // $photoUrl = Storage::url($photo);
-        $parent_id= 'practiceblog';
-        foreach($post->photos() as $photo){
-            $file= $request()->file('photo');
-            $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
-            $fileMetadata = new Google_Service_Drive_DriveFile([
-                'name' => $name,
-                'parent' => $parent_id ? $parent_id : 'root'
-            ]);
-    
-            $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
-            $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
-    
-            $file = $this->drive->files->create($fileMetadata, [
-                'data' => $content,
-                'mimeType' => $mimeType,
-                'uploadType' => 'multipart',
-                'fields' => 'id'
-            ]);
-            $photo->url= 'https://drive.google.com/open?id='.$file->id;
-        }    
+        $file= $request->file('file');
+        $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
+        $fileMetadata = new Google_Service_Drive_DriveFile([
+            'name' => $name,
+            'parents' => [$parent_id]
+        ]);
+        
+        $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
+        $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
+        $file = $this->drive->files->create($fileMetadata, [
+            'data' => $content,
+            'mimeType' => $mimeType,
+            'uploadType' => 'multipart',
+            'fields' => 'id'
+        ]);
+        
+        //return back();
+
     }
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+        return redirect('/')->with('message', ['type' => 'success', 'text' => 'You are now logged out']);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

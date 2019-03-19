@@ -20,9 +20,15 @@ Route::group([
 	'middleware' => 'auth'], 
 	function (){
 	Route::get('/','AdminController@index')->name('dashboard');
-	//Route::post('posts/{post}/photos','GoogleDriveController@store')->name('admin.posts.photos.store');
-	Route::post('posts/{post}/photos','GoogleDriveController@uploadFile')->name('admin.posts.photos.store');
+	Route::post('posts/{post}/photos','GoogleDriveController@store')->name('admin.posts.photos.store');
 	Route::delete('photos/{photo}','GoogleDriveController@destroy')->name('admin.photos.destroy');
+	
+	Route::get('/drive', 'GoogleDriveController@getDrive'); // retreive folders
+	Route::get('/drive/upload', 'GoogleDriveController@uploadFile'); // File upload form
+	//Route::post('/drive/upload', 'DriveController@uploadFile'); // Upload file to Drive from Form
+	Route::post('/drive/create', 'GoogleDriveController@store')->name('admin.drive.create'); // Upload file to Drive from Storage
+	Route::get('/drive/delete/{id}', 'GoogleDriveController@deleteFile'); // Delete file or folder
+	
 	Route::resource('posts','PostsController',['except' => 'show', 'as' => 'admin']);
 	Route::resource('users','UsersController',['as' => 'admin']);
 	Route::middleware('role:Admin')
@@ -31,6 +37,8 @@ Route::group([
 	Route::middleware('role:Admin')
 		->put('users/{user}/permissions','UsersPermissionsController@update')
 		->name('admin.users.permissions.update');
+
+	Route::post('posts/{post}/photos','PhotosController@store')->name('admin.posts.photos.store');
 });
 
 //Rutas de autenticación con redes sociales
