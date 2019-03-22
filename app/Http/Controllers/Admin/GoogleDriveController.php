@@ -6,6 +6,7 @@ use Exception;
 use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Drive_DriveFile;
+use Google_Service_Drive_Permission;
 use App\SocialNetwork;
 use App\Post;
 use App\Photo;
@@ -27,12 +28,15 @@ class GoogleDriveController extends Controller
         });
     }
     public function getDrive(){
-        $folderInRoot =$this->ListFolders('root');
+        $folderInRoot =$this->listFolders('root');
         return $folderInRoot;
     }
- 
-    public function ListFolders($id){
- 
+
+
+    /**
+     * 
+     */
+    public function listFolders($id){
         $query = "mimeType='application/vnd.google-apps.folder' and '".$id."' in parents and trashed=false";
  
         $optParams = [
@@ -45,19 +49,8 @@ class GoogleDriveController extends Controller
         return $results->getFiles();
              
     }
- 
-    function uploadFile(Request $request){
-        if($request->isMethod('GET')){
-            return view('upload');
-        }else{
-            $this->createFile($request->file('file'));
-        }
-    }
- 
-    function createStorageFile($storage_path){
-        $this->createFile($storage_path);
-    }
 
+ 
     function createFolder($folder_name, $parent_id=null ){
         $folder_meta = new Google_Service_Drive_DriveFile([
             'name' => $folder_name,
@@ -121,11 +114,33 @@ class GoogleDriveController extends Controller
             'uploadType' => 'multipart',
             'fields' => 'id'
         ]);
-        
-        Photo::create(['post_id'=> $post_id,'file_id'=>$file->id]);
+        $this->permissionShareFilesDomain($file->id,'reader');
+        Photo::create(['post_id'=> $post_id,'file_id'=>'https://drive.google.com/uc?export=view&id='.$file->id]);
         return back();
 
     }
+    /**
+     * 
+     */
+    public function permissionShareFilesDomain($fileId, $role){
+        $this->drive->getClient()->setUseBatch(true);
+        try {
+            $batch = $this->drive->createBatch();
+            $userPermission = new Google_Service_Drive_Permission(array(
+                'type' => 'anyone',
+                'role' => $role
+            ));
+            $request = $this->drive->permissions->create(
+                $fileId, $userPermission, array('fields' => 'id'));
+            $batch->add($request, 'anyone');
+            $results = $batch->execute();
+        } finally {
+            $this->drive->getClient()->setUseBatch(false);
+        }
+    }
+    /**
+     * 
+     */
     public function logout(Request $request)
     {
         $request->session()->flush();
