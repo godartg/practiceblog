@@ -31,14 +31,18 @@ class SocialAuthController extends Controller
         $socialUser = Socialite::driver('google')->stateless()->user();
         
         if(!Auth::check()){
-            $user = User::updateOrCreate(['name' => $socialUser->name, 
-                                        'email'   =>  $socialUser->email],
+
+            $user = User::updateOrCreate(['email'=>$socialUser->email],
                                         ['refresh_token'=>  $socialUser->token,
                                         'provider_id' => $socialUser->getId()]);
+            
             $user->assignRole($adminRole);
             Auth::Login($user, true);
         }else{
             $user = User::find(Auth::user()->id);
+            if($user->email!=$socialUser->email){
+                $user->email= $socialUser->email;
+            }
             $user->refresh_token = $socialUser->token;
             $user->provider_id = $socialUser->getId();
             $user->save();

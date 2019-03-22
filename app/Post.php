@@ -11,7 +11,7 @@ class Post extends Model
     // protected $guarded = [];
 
     protected $fillable = [
-        'title', 'body', 'iframe', 'excerpt', 'published_at', 'category_id', 'user_id',
+        'title', 'body', 'iframe', 'excerpt', 'published_at', 'category_id', 'user_id', 'folder_id',
     ];
 
     protected static function boot()

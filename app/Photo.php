@@ -8,7 +8,7 @@ class Photo extends Model
 {
     
     protected $fillable = [
-        'post_id', 'url', 
+        'post_id', 'file_id', 
     ];
     protected static function boot()
     {
