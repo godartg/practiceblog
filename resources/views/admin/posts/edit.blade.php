@@ -29,7 +29,7 @@
 								<button class="btn btn-xs btn-danger" style="position: absolute;">
 									<i class="fa fa-remove"></i>
 								</button>
-								<img class="img-responsive" src="{{ $photo->file_id }}">
+								<img class="img-responsive" src="https://drive.google.com/uc?export=view&id={{ $photo->file_id }}">
 							</div>
 						</form>
 						@endforeach

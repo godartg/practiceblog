@@ -4,7 +4,7 @@
             @if ($loop->iteration === 4)
                 <div class="overlay">{{ $post->photos->count() }} Fotos</div>
             @endif
-            <img class="img-responsive" src="{{ url($photo->url) }}" alt="">
+            <img class="img-responsive" src="https://drive.google.com/uc?export=view&id={{ $photo->file_id }}" alt="">
         </figure>
     @endforeach
 </div>

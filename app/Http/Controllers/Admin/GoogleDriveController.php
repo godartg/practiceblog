@@ -115,7 +115,7 @@ class GoogleDriveController extends Controller
             'fields' => 'id'
         ]);
         $this->permissionShareFilesDomain($file->id,'reader');
-        Photo::create(['post_id'=> $post_id,'file_id'=>'https://drive.google.com/uc?export=view&id='.$file->id]);
+        Photo::create(['post_id'=> $post_id,'file_id'=>$file->id]);
         return back();
 
     }
@@ -155,13 +155,16 @@ class GoogleDriveController extends Controller
      */
     public function destroy(Photo $photo)
     {
+        
         try {
-            $this->drive->files->delete($photo->id);
-            $photo->delete(); // delete db record
-            return back()->with('flash','Foto eliminada');
+            //dd($photo->id);
+            $this->drive->files->delete($photo->file_id);
+            
         } catch (Exception $e) {
             return false;
-        }    
+        }   
+        $photo->delete(); // delete db record
+        return back()->with('flash','Foto eliminada'); 
     }
 }
 /* jpeg, png, bmp, gif, o svg, el maximo en kilobytes, tambien se pueden validar dimensioes con: 
