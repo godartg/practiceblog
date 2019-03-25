@@ -127,9 +127,6 @@
 					{!! $errors->first('excerpt','<span class="help-block">:message</span>') !!}
 				</div>
 				<div class="form-group">
-					<div class="dropzone"></div>
-				</div>
-				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-block">Guardar publicación</button>
 				</div>
 			</div>
@@ -163,7 +160,6 @@
 		CKEDITOR.replace('editor');
 
 		CKEDITOR.config.height = 315;
-		
-		
+
 	</script>
 @endpush
