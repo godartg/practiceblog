@@ -59,6 +59,7 @@ POST
     </tbody>
     
   </table>
+  <div id="print_button_container">Imprimir</div>
 </div>
 <!-- /.box-body -->
 </div>
@@ -69,7 +70,16 @@ POST
 @push('styles')
   <!-- bootstrap datepicker -->
   <link rel="stylesheet" href="/adminlte/plugins/datepicker/datepicker3.css">
-
+  <script src="https://www.google.com/cloudprint/client/cpgadget.js"></script>
+  <script>
+	window.onload = function() {
+    var gadget = new cloudprint.Gadget();
+    gadget.setPrintButton(
+        cloudprint.Gadget.createDefaultPrintButton("print_button_container")); // div id to contain the button
+    gadget.setPrintDocument("[document mimetype]", "[document title]", "[document content]", "[encoding] (optional)");
+  	}
+  </script>
+	
 @endpush
 @push('scripts')
 	
@@ -88,4 +98,5 @@ POST
 	    });
 	  });
 	</script>
+	
 @endpush

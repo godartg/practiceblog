@@ -30,6 +30,7 @@
 									<i class="fa fa-remove"></i>
 								</button>
 								<img class="img-responsive" src="https://drive.google.com/uc?export=view&id={{ $photo->file_id }}">
+								
 							</div>
 						</form>
 						@endforeach
