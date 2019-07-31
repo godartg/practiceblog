@@ -10,7 +10,7 @@
                     {{-- <label for="file">Choose a profile picture:</label> --}}
                     {{-- <input type="submit" class="btn btn-primary btn-block" value="Submit"> --}}
                     {{-- <input type="file" name="file"> --}}
-                    <a href="" class="btn btn-primary btn-block">Nueva imagen</a>
+                    <a href="{{ route('admin.photos.edit',$post_id) }}" class="btn btn-primary btn-block">Nueva imagen</a>
                 </form>
             </div>
         </div>
