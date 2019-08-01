@@ -70,6 +70,8 @@ class GoogleDriveController extends Controller
      */
     function store(Request $request){
         //Buscar o crear practicefolder
+        return $request->params;
+
         $listFoldersRoot=$this->getDrive();
         if (count($listFoldersRoot) == 0) {
             $parent_id= $this->createFolder('practicefolder');
@@ -90,7 +92,8 @@ class GoogleDriveController extends Controller
             }
         }
         //Buscar o crear post
-        $post_id =$request->input('post_id');
+        $post_id =$request->params;
+        dd($post_id);
         $postFolderIdDrive = Post::find($post_id);
         if( $postFolderIdDrive->folder_id == '' ){
             $folderPostId = $this->createFolder($post_id, $parent_id);

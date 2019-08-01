@@ -9,6 +9,7 @@
 window.onload = function(){
     'use strict';
 
+    console.log(post_id);
 
     /** Variables globales */
     var source_image = document.getElementById('source_image');
@@ -723,8 +724,11 @@ window.onload = function(){
              */
             // console.log(dataToServer);
         	// return dataToServer;
-            axios.post('https://jsonplaceholder.typicode.com/posts',{
+            axios.post('/admin/drive/create',{
                 image: dataToServer,
+                params: {
+                         'post_id': post_id,
+                        }
             })
             .then((r) => console.log(r))
             .catch((e) => console.log(e));

@@ -104,6 +104,7 @@
         </form>    
     </div>
 </div>
+
 @stop
 
 @push('styles')
@@ -125,5 +126,11 @@
 	<!-- axios v0.19.0 -->
 	<script src="/js/axios.min.js"></script>
 	<!-- cropper-compress.js -->
+	<script>
+			
+	var post_id = {!! $post_id !!}
+
+	</script>
 	<script src="/js/cropper-compress.js"></script>
+
 @endpush
