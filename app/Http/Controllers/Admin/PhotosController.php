@@ -24,9 +24,10 @@ class PhotosController extends Controller
     	// 	'post_id' => $post->id,
     	// ]);
     }
-    public function editnewphoto(Post $post)
+    public function editnewphoto( $post_id)
     {
-    	return view('admin.posts.photoedit');
+        
+    	return view('admin.posts.photoedit', $post_id);
     }
     public function editphoto(Post $post)
     {

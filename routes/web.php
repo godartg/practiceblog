@@ -22,8 +22,8 @@ Route::group([
 	Route::get('/','AdminController@index')->name('dashboard');
 
 	Route::delete('photos/{photo}','GoogleDriveController@destroy')->name('admin.photos.destroy');
-	Route::get('editphoto/','PhotosController@editnewphoto')->name('admin.photos.editnew');
-	Route::get('editphoto/{photo}','PhotosController@editphoto')->name('admin.photos.edit');
+	Route::get('editphoto/{post_id}','PhotosController@editnewphoto')->name('admin.photos.editnew');
+	
 	Route::post('/drive/edit', 'GoogleDriveController@edit')->name('admin.drive.edit'); 
 	Route::post('/drive/create', 'GoogleDriveController@store')->name('admin.drive.create'); 
 	
