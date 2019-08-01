@@ -27,7 +27,7 @@ class PhotosController extends Controller
     public function editnewphoto( $post_id)
     {
         
-    	return view('admin.posts.photoedit', $post_id);
+    	return view('admin.posts.photoedit', compact("post_id"));
     }
     public function editphoto(Post $post)
     {
