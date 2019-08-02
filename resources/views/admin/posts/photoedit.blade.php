@@ -70,10 +70,7 @@
                     <input type="number" id="inputNumberCalidad" min="1" max="99" value="50" step="1" style="width: 60px;">
                     <input type="range" id="inputRangeCalidad"  min="1" max="99" value="50">
                     
-                    <br><br>
-
                     <div class="table">
-                        <hr>
                         <h5 style="size: 15px; margin-top: 0; margin-bottom: 10px;">Opciones avanzadas</h5>
                         <table>
                             <thead>
