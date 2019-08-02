@@ -198,7 +198,7 @@ window.onload = function(){
         var image = imageCompress(result_image); // compresion de imagen
 
         if (activeAdvanced.checked) {
-            activeAdvancedMessage.innerHTML = 'Listo';
+            activeAdvancedMessage.innerHTML = '<span class="d-none">Listo</span>';
             for (var item of inputRadio) {
                 item.disabled = true;
             }
@@ -235,7 +235,7 @@ window.onload = function(){
             }
 
         }else{
-            activeAdvancedMessage.innerHTML = 'Activar';
+            activeAdvancedMessage.innerHTML = '<span class="d-none">Activar</span>';
             for (var item of inputRadio) {
                 item.disabled = false;
             }
