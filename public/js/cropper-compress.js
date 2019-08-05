@@ -9,7 +9,7 @@
 window.onload = function(){
     'use strict';
 
-    console.log(post_id);
+    
 
     /** Variables globales */
     var source_image = document.getElementById('source_image');
@@ -732,7 +732,9 @@ window.onload = function(){
             })
             .then((r) => console.log(r))
             .catch((e) => console.log(e));
+            console('axios????');
         }
+        console('llego????');
     }
 
     // Detecta evento submit de formulario
