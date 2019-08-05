@@ -1,21 +1,21 @@
 @extends('admin.layout')
 @section('header')
-<h2 style="text-align: center; color: #1A73E8; font-family: Arial; font-size: 16px;">CROPPER-COMPRESS V1.0</h2>
+<h2 style="text-align: center; color: #1A73E8;font-weight: bold; font-family: Helvetica; font-size: 16px;">CROPPER-COMPRESS</h2>
 
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-md-12" id="containerImage">
+<div class="row containerCropperCompress">
+    <div class="col-md-8" id="containerImage">
         <img id="source_image" crossorigin="anonymous" src="">
         <img id="result_image" style="display: none;" crossorigin="anonymous" src="">
     </div>
-    <div class="col-md-12">
+    <div class="col-md-4">
         <form action="{{route('admin.drive.create')}}" id="imageInputForm">
             @csrf
             <input type="hidden" name="post_id" value="{{ $post_id }}">
             <input type="file" id="inputImage" accept="image/*" />
-            <button id="btnGoBack">Regresar</button>
+            <button id="btnGoBack">Recargar</button>
             <div id="actions">
 
                 <fieldset class="docs-toggles">
@@ -58,9 +58,9 @@
                 
                 <fieldset class="docs-advanced">
                     <legend>Información de imagen</legend>
-                    <label>
+                    <label for="activeAdvanced" class="switch">
                         <input type="checkbox" id="activeAdvanced">
-                        <span id="activeAdvancedMessage">Activar</span>
+                        <span id="activeAdvancedMessage" class="slider round"></span>
                     </label>
                 </fieldset>
 
@@ -70,10 +70,7 @@
                     <input type="number" id="inputNumberCalidad" min="1" max="99" value="50" step="1" style="width: 60px;">
                     <input type="range" id="inputRangeCalidad"  min="1" max="99" value="50">
                     
-                    <br><br>
-
                     <div class="table">
-                        <hr>
                         <h5 style="size: 15px; margin-top: 0; margin-bottom: 10px;">Opciones avanzadas</h5>
                         <table>
                             <thead>
