@@ -70,9 +70,11 @@ class GoogleDriveController extends Controller
      */
     function store(Request $request){
         //Buscar o crear practicefolder
-        return $request->params;
+        //dd($request->params);
+        //
 
         $listFoldersRoot=$this->getDrive();
+        
         if (count($listFoldersRoot) == 0) {
             $parent_id= $this->createFolder('practicefolder');
         } else {
@@ -91,9 +93,11 @@ class GoogleDriveController extends Controller
                 $parent_id= $this->createFolder('practicefolder');
             }
         }
+        
         //Buscar o crear post
-        $post_id =$request->params;
-        dd($post_id);
+        
+        $post_id = $request->input('post_id');;
+        
         $postFolderIdDrive = Post::find($post_id);
         if( $postFolderIdDrive->folder_id == '' ){
             $folderPostId = $this->createFolder($post_id, $parent_id);
@@ -103,7 +107,7 @@ class GoogleDriveController extends Controller
             $folderPostId = $postFolderIdDrive->folder_id;
             
         }
-        $file= $request->file('file');
+        $file= $request->file('image');
         $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
         $fileMetadata = new Google_Service_Drive_DriveFile([
             'name' => $name,

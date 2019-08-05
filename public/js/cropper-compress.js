@@ -722,19 +722,24 @@ window.onload = function(){
             /**
              * enviar al servidor con axios
              */
-            // console.log(dataToServer);
-        	// return dataToServer;
-            axios.post('/admin/drive/create',{
+            //console.log(dataToServer);
+            // return dataToServer;
+            formData.append('image', dataToServer)
+
+            let data = {
+                'post_id': post_id,
+            }
+            formData('data', data);
+            axios.post('/admin/drive/create',
+              {
                 image: dataToServer,
                 params: {
                          'post_id': post_id,
                         }
             })
-            .then((r) => console.log(r))
+            .then(response => console.log(response))
             .catch((e) => console.log(e));
-            console('axios????');
         }
-        console('llego????');
     }
 
     // Detecta evento submit de formulario
