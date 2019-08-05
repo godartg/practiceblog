@@ -14,29 +14,41 @@
         <form action="{{route('admin.drive.create')}}" id="imageInputForm">
             @csrf
             <input type="hidden" name="post_id" value="{{ $post_id }}">
-            <input type="file" id="inputImage" accept="image/*" />
+
+            <label class="custom-file-upload">
+                <input type="file" id="inputImage" name="inputImage" accept="image/*"/>
+                <i class="fa fa-upload"></i>
+                &nbsp; Selecciona una imagen
+            </label>
+
             <button id="btnGoBack">Recargar</button>
             <div id="actions">
 
                 <fieldset class="docs-toggles">
-                    <div class="d-block">
-                        <legend>Tipo de recorte</legend>
-                        <label>
-                            <input type="radio" data-method="libre" name="clippingType">
-                            <span>Libre</span>
-                        </label>
-                        <label>
-                            <input type="radio" data-method="rectangle" name="clippingType">
-                            <span>Rectangular</span>
-                        </label>
-                        <label>
-                            <input type="radio" data-method="cuadrado" name="clippingType">
-                            <span>Cuadrado</span>
-                        </label>
-                        <label>
-                            <input type="radio" data-method="circle" name="clippingType">
-                            <span>Circular</span>
-                        </label>
+                    <div class="d-block ">
+                        <legend class="cropper-title">Tipo de recorte</legend>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input id="radio-libre" style="display: none;" type="radio" data-method="libre" name="clippingType">
+                                <i class="fa fa-upload"></i>
+                                <label for="radio-libre">Libre</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="radio-rectangular" style="display: none;" type="radio" data-method="rectangle" name="clippingType">
+                                <i class="fa fa-upload"></i>
+                                <label for="radio-rectangular">Rectangular</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="radio-cuadrado" style="display: none;" type="radio" data-method="cuadrado" name="clippingType">
+                                <i class="fa fa-upload"></i>
+                                <label for="radio-cuadrado">Cuadrado</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="radio-circular" style="display: none;" type="radio" data-method="circle" name="clippingType">
+                                <i class="fa fa-upload"></i>
+                                <label for="radio-circular">Circular</label>
+                            </div>  
+                        </div>
                     </div>
                     <div class="d-block">
                         <h5 class="d-inline">Alto</h5>
@@ -49,7 +61,7 @@
                 </fieldset>
 
                 <fieldset class="docs-buttons">
-                    <legend>Opciones</legend>
+                    <legend class="cropper-title">Opciones</legend>
                     <button type="button" data-method="cancel" id="btnCancel">Cancelar</button>
                     <div style="float: right;">
                         <button type="submit" id="btnSaveUpload">Subir</button>
@@ -57,7 +69,7 @@
                 </fieldset>
                 
                 <fieldset class="docs-advanced">
-                    <legend>Información de imagen</legend>
+                    <legend class="cropper-title">Información de imagen</legend>
                     <label for="activeAdvanced" class="switch">
                         <input type="checkbox" id="activeAdvanced">
                         <span id="activeAdvancedMessage" class="slider round"></span>
@@ -65,7 +77,7 @@
                 </fieldset>
 
                 <fieldset class="advanced d-none">
-                    <legend>Calidad de imagen</legend>
+                    <legend class="cropper-title">Calidad de imagen</legend>
                     <h5 class="d-inline">Calidad</h5>
                     <input type="number" id="inputNumberCalidad" min="1" max="99" value="50" step="1" style="width: 60px;">
                     <input type="range" id="inputRangeCalidad"  min="1" max="99" value="50">
