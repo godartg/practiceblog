@@ -155,6 +155,9 @@ input:checked + .slider:before {
     font-weight: bold;
     border-radius: 4px;
 }
+.activeRadio {
+  color: #1A73E8;
+}
 
 /* estilos para input checkbox */
 

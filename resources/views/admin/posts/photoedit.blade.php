@@ -27,26 +27,34 @@
                 <fieldset class="docs-toggles">
                     <div class="d-block ">
                         <legend class="cropper-title">Tipo de recorte</legend>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <input id="radio-libre" style="display: none;" type="radio" data-method="libre" name="clippingType">
-                                <i class="fa fa-upload"></i>
-                                <label for="radio-libre">Libre</label>
+                        <div class="row crop-style-container">
+                            <div class="col-md-3 text-center crop-style-item">
+                                <label for="radio-libre" class="crop-style-item">
+                                    <input id="radio-libre" class="inputRadio" style="display: none;" type="radio" data-method="libre" name="clippingType">
+                                    <i class="material-icons">crop</i>
+                                    Libre
+                                </label>
                             </div>
-                            <div class="col-md-3">
-                                <input id="radio-rectangular" style="display: none;" type="radio" data-method="rectangle" name="clippingType">
-                                <i class="fa fa-upload"></i>
-                                <label for="radio-rectangular">Rectangular</label>
+                            <div class="col-md-3 text-center crop-style-item">
+                                <label for="radio-rectangular" class="crop-style-item">
+                                    <input id="radio-rectangular" class="inputRadio" style="display: none;" type="radio" data-method="rectangle" name="clippingType">
+                                    <i class="material-icons">crop_5_4</i>
+                                    Rectangular
+                                </label>
                             </div>
-                            <div class="col-md-3">
-                                <input id="radio-cuadrado" style="display: none;" type="radio" data-method="cuadrado" name="clippingType">
-                                <i class="fa fa-upload"></i>
-                                <label for="radio-cuadrado">Cuadrado</label>
+                            <div class="col-md-3 text-center crop-style-item">
+                                <label for="radio-cuadrado" class="crop-style-item">
+                                    <input id="radio-cuadrado" class="inputRadio" style="display: none;" type="radio" data-method="cuadrado" name="clippingType">
+                                    <i class="material-icons">crop_square</i>
+                                    Cuadrado
+                                </label>
                             </div>
-                            <div class="col-md-3">
-                                <input id="radio-circular" style="display: none;" type="radio" data-method="circle" name="clippingType">
-                                <i class="fa fa-upload"></i>
-                                <label for="radio-circular">Circular</label>
+                            <div class="col-md-3 text-center crop-style-item">
+                                <label for="radio-circular" class="crop-style-item">
+                                    <input id="radio-circular" class="inputRadio" style="display: none;" type="radio" data-method="circle" name="clippingType">
+                                    <i class="material-icons">all_out</i>
+                                    Circular
+                                </label>
                             </div>  
                         </div>
                     </div>
@@ -136,8 +144,14 @@
 	<script src="/js/axios.min.js"></script>
 	<!-- cropper-compress.js -->
 	<script>
-			
-	var post_id = {!! $post_id !!}
+	   var post_id = {!! $post_id !!};
+
+       let container = document.querySelector('.crop-style-container');
+       container.addEventListener('click', e => {
+        if(e.target.classList.contains('crop-style-item')){
+            console.log(e.target.classList.add("activeRadio"));
+        }
+       })
 
 	</script>
 	<script src="/js/cropper-compress.js"></script>

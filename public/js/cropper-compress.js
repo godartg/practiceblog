@@ -287,7 +287,6 @@ window.onload = function(){
       	switch (data.method) {
             case 'libre':
       			options['aspectRatio'] = NaN;
-      			console.log(arrayImages);
       			cen = false;
             	activeAdvanced.disabled = true;
             	activaBotonCancel();
