@@ -15,11 +15,15 @@
             @csrf
             <input type="hidden" name="post_id" value="{{ $post_id }}">
 
-            <label class="custom-file-upload">
+            <label class="cropper-btn-primary">
                 <input type="file" id="inputImage" name="inputImage" accept="image/*"/>
-                <i class="fa fa-upload"></i>
+                <i class="fa fa-picture-o"></i>
                 &nbsp; Selecciona una imagen
             </label>
+            <a class="cropper-btn-secondary" href="{{ redirect()->getUrlGenerator()->previous() }}">
+                <i class="fa fa-times"></i>
+                &nbsp; Cancelar
+            </a>
 
             <button id="btnGoBack">Recargar</button>
             <div id="actions">
@@ -73,7 +77,7 @@
                     <legend class="cropper-title">Opciones</legend>
                     <button type="button" data-method="cancel" id="btnCancel">Cancelar</button>
                     <div style="float: right;">
-                        <button type="submit" id="btnSaveUpload">Subir</button>
+                        <button class="cropper-btn-primary" type="submit" id="btnSaveUpload">Subir</button>
                     </div>
                 </fieldset>
                 
