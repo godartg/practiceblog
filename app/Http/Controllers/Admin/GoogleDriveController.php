@@ -93,7 +93,7 @@ class GoogleDriveController extends Controller
         
         //Buscar o crear post
         
-        $post_id = $request->input('post_id');;
+        $post_id = $request->post_id;
         
         $postFolderIdDrive = Post::find($post_id);
         if( $postFolderIdDrive->folder_id == '' ){
@@ -103,8 +103,16 @@ class GoogleDriveController extends Controller
         }else{
             $folderPostId = $postFolderIdDrive->folder_id;
         }
-        $file= $request->file('image');
+        
+        //decode base64 string
+        $image = $request->image;  // your base64 encoded
+        $image = str_replace('data:image/jpeg;base64,', '', $image);
+        $image = str_replace(' ', '+', $image);
+        $imageName = str_random(10).'.'.'jpeg';
+        $file = base64_decode($image);
+        
         $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
+        
         $fileMetadata = new Google_Service_Drive_DriveFile([
             'name' => $name,
             'parents' => [$folderPostId]

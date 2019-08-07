@@ -715,19 +715,19 @@ window.onload = function(){
      * compara si es formato base64
      */
     function isBase64(dataToServer){
+        
         let dataToServerString = dataToServer.substr(0,10);
         if (dataToServerString === 'data:image') {
             /**
              * enviar al servidor con axios
              */
-            //console.log(dataToServer);
+            
             // return dataToServer;
             axios.post('/admin/drive/create',
               {
                 image: dataToServer,
-                params: {
-                         'post_id': post_id,
-                        }
+                post_id: post_id,
+                
             })
             .then(response => console.log(response))
             .catch((e) => console.log(e));
