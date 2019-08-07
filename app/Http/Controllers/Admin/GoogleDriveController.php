@@ -71,10 +71,7 @@ class GoogleDriveController extends Controller
     function store(Request $request){
         //Buscar o crear practicefolder
         //dd($request->params);
-        //
-
         $listFoldersRoot=$this->getDrive();
-        
         if (count($listFoldersRoot) == 0) {
             $parent_id= $this->createFolder('practicefolder');
         } else {
@@ -105,7 +102,6 @@ class GoogleDriveController extends Controller
             $postFolderIdDrive->save();
         }else{
             $folderPostId = $postFolderIdDrive->folder_id;
-            
         }
         $file= $request->file('image');
         $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
