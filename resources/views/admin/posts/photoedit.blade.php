@@ -28,29 +28,30 @@
                     <div class="d-block ">
                         <legend class="cropper-title">Tipo de recorte</legend>
                         <div class="row crop-style-container">
+                            <div class="cropStyleItem activeRadio d-none" id="crop-style-item-d-none"></div>
                             <div class="col-md-3 text-center crop-style-item">
-                                <label for="radio-libre" class="crop-style-item">
+                                <label for="radio-libre">
                                     <input id="radio-libre" class="inputRadio" style="display: none;" type="radio" data-method="libre" name="clippingType">
                                     <i class="material-icons">crop</i>
                                     Libre
                                 </label>
                             </div>
                             <div class="col-md-3 text-center crop-style-item">
-                                <label for="radio-rectangular" class="crop-style-item">
+                                <label for="radio-rectangular">
                                     <input id="radio-rectangular" class="inputRadio" style="display: none;" type="radio" data-method="rectangle" name="clippingType">
                                     <i class="material-icons">crop_5_4</i>
                                     Rectangular
                                 </label>
                             </div>
                             <div class="col-md-3 text-center crop-style-item">
-                                <label for="radio-cuadrado" class="crop-style-item">
+                                <label for="radio-cuadrado">
                                     <input id="radio-cuadrado" class="inputRadio" style="display: none;" type="radio" data-method="cuadrado" name="clippingType">
                                     <i class="material-icons">crop_square</i>
                                     Cuadrado
                                 </label>
                             </div>
                             <div class="col-md-3 text-center crop-style-item">
-                                <label for="radio-circular" class="crop-style-item">
+                                <label for="radio-circular">
                                     <input id="radio-circular" class="inputRadio" style="display: none;" type="radio" data-method="circle" name="clippingType">
                                     <i class="material-icons">all_out</i>
                                     Circular
@@ -146,12 +147,47 @@
 	<script>
 	   var post_id = {!! $post_id !!};
 
-       let container = document.querySelector('.crop-style-container');
-       container.addEventListener('click', e => {
-        if(e.target.classList.contains('crop-style-item')){
-            console.log(e.target.classList.add("activeRadio"));
+       // let container = document.querySelector('.crop-style-container');
+       // container.addEventListener('click', e => {
+       //  if(e.target.classList.contains('crop-style-item')){
+       //      console.log(e.target);
+       //      console.log(e.target.classList.add("activeRadio"));
+       //  }
+       // })
+       let cropStyleContainer = document.querySelector('.crop-style-container');
+
+       let cropStyleItem = document.getElementsByClassName("crop-style-item");
+
+
+       for (var i = 0; i < cropStyleItem.length; i++) {
+          cropStyleItem[i].addEventListener("click", function() {
+            var current = document.getElementsByClassName("activeRadio");
+            current[0].className = current[0].className.replace(" activeRadio", "");
+            this.className += " activeRadio";
+          });
         }
-       })
+
+        let activeOption = document.getElementsByClassName(".activeRadio");
+        let cropStyleItemDNone = document.getElementById('crop-style-item-d-none');
+        let btnCancel = document.getElementById('btnCancel');
+        let btnSaveUpload = document.getElementById('btnSaveUpload');
+
+
+        btnCancel.addEventListener('click', function(){
+            cancelaStyleActiveRadio();
+        });
+
+        btnSaveUpload.addEventListener('click', function(){
+            cancelaStyleActiveRadio();
+        });
+
+        function cancelaStyleActiveRadio() {
+            for (var i = 0; i < cropStyleItem.length; i++) {
+              cropStyleItem[i].classList.remove("activeRadio");
+            }
+            cropStyleItemDNone.className += " activeRadio";
+        }
+
 
 	</script>
 	<script src="/js/cropper-compress.js"></script>
