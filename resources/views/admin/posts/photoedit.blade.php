@@ -11,7 +11,7 @@
         <img id="result_image" style="display: none;" crossorigin="anonymous" src="">
     </div>
     <div class="col-md-4">
-        <form action="{{route('admin.drive.create')}}" id="imageInputForm">
+        <form action="" id="imageInputForm">
             @csrf
             <input type="hidden" name="post_id" value="{{ $post_id }}">
 

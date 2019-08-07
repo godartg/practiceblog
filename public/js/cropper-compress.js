@@ -724,12 +724,6 @@ window.onload = function(){
              */
             //console.log(dataToServer);
             // return dataToServer;
-            formData.append('image', dataToServer)
-
-            let data = {
-                'post_id': post_id,
-            }
-            formData('data', data);
             axios.post('/admin/drive/create',
               {
                 image: dataToServer,
