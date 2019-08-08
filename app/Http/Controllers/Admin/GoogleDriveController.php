@@ -106,11 +106,10 @@ class GoogleDriveController extends Controller
         
         //decode base64 string
         $image = $request->image;  // your base64 encoded
-        $image = str_replace('data:image/jpeg;base64,', '', $image);
-        $image = str_replace(' ', '+', $image);
-        $imageName = str_random(10).'.'.'jpeg';
-        $file = base64_decode($image);
+        //$image = base64_decode(file_get_contents($request->image)); 
         
+        $file= $this->base64ToImage($image, "nombre.jpeg");
+        return $file;
         $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
         
         $fileMetadata = new Google_Service_Drive_DriveFile([
@@ -149,6 +148,19 @@ class GoogleDriveController extends Controller
         } finally {
             $this->drive->getClient()->setUseBatch(false);
         }
+    }
+    /**
+     *  Convert base64 to image file in PHP
+     *  convertir de base64 a archivo imagen
+     *  https://netcell.netlify.com/blog/2016/04/image-base64.html
+     */
+    public function base64ToImage($base64_string, $output_file) {
+        $file = fopen($output_file, "wb");
+        $data = explode(',', $base64_string);
+        fwrite($file, base64_decode($data[1]));
+        fclose($file);
+    
+        return $output_file;
     }
     /**
      * 

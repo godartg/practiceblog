@@ -718,6 +718,7 @@ window.onload = function(){
     function isBase64(dataToServer){
         
         let dataToServerString = dataToServer.substr(0,10);
+        
         if (dataToServerString === 'data:image') {
             /**
              * enviar al servidor con axios
@@ -734,7 +735,20 @@ window.onload = function(){
             .catch((e) => console.log(e));
         }
     }
-
+    
+    function decodeBase64Image(dataString) {
+        var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+          response = {};
+      
+        if (matches.length !== 3) {
+          return new Error('Invalid input string');
+        }
+      
+        response.type = matches[1];
+        response.data = new Buffer(matches[2], 'base64');
+      
+        return response;
+      }
     // Detecta evento submit de formulario
     document.getElementById('imageInputForm').addEventListener('submit', getRequestPost);
     // Previene que se recarge la pagina
