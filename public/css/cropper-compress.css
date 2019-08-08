@@ -7,15 +7,13 @@
  * azul   | #1A73E8
  * gris   | #EEEEEE
  * negro  | #474747
+ * gris2  | #646464
  */
 table {
   border-collapse: collapse;
   width: 100%;
 }
 
-table, th, td {
-  border: 1px solid black;
-}
 .containerCropperCompress {
   margin: 20px auto;
   max-width: 100%;
@@ -173,11 +171,96 @@ input:checked + .slider:before {
 .activeRadio {
   color: #1A73E8;
 }
+.cropper-style-option {
+  margin-bottom: 20px;
+}
+#inputNumberCalidad{
+  width: 45px;
+  border: none;
+  background: rgba(0,0,0,0);
+  border-bottom: 1px solid #646464;
+}
+#inputRangeCalidad{
+  display: inline;
+}
 
-/* estilos para input checkbox */
 
+/* inicia estilos para slider */
 
-/*slider*/
+.inputDiv {
+  position: relative;
+  
+}
+
+input[type='range'] {
+  display: block;
+  width: 150px;
+}
+
+input[type='range']:focus {
+  outline: none;
+}
+
+input[type='range'],
+input[type='range']::-webkit-slider-runnable-track,
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  background-color: #1A73E8;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #EEE;
+  border-radius: 50%;
+  margin-top: -9px;
+}
+
+input[type=range]::-moz-range-thumb {
+  background-color: #1A73E8;
+  width: 15px;
+  height: 15px;
+  border: 3px solid #EEE;
+  border-radius: 50%;
+}
+
+input[type=range]::-ms-thumb {
+  background-color: #1A73E8;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #EEE;
+  border-radius: 50%;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  background-color: #1A73E8;
+  height: 3px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  outline: none;
+}
+
+input[type=range]::-moz-range-track {
+  background-color: #1A73E8;
+  height: 3px;
+}
+
+input[type=range]::-ms-track {
+  background-color: #1A73E8;
+  height: 3px;
+}
+
+input[type=range]::-ms-fill-lower {
+  background-color: HotPink
+}
+
+input[type=range]::-ms-fill-upper {
+  background-color: black;
+} 
+
+/* fin estilos para slider */
+
 
 /* Versiones tabletas */
 @media (min-width: 576px) {

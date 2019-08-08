@@ -15,21 +15,10 @@
             @csrf
             <input type="hidden" name="post_id" value="{{ $post_id }}">
 
-            <label class="cropper-btn-primary">
-                <input type="file" id="inputImage" name="inputImage" accept="image/*"/>
-                <i class="fa fa-picture-o"></i>
-                &nbsp; Selecciona una imagen
-            </label>
-            <a class="cropper-btn-secondary" href="{{ redirect()->getUrlGenerator()->previous() }}">
-                <i class="fa fa-times"></i>
-                &nbsp; Cancelar
-            </a>
-
-            <button id="btnGoBack">Recargar</button>
             <div id="actions">
 
                 <fieldset class="docs-toggles">
-                    <div class="d-block ">
+                    <div class="d-block cropper-style-option">
                         <legend class="cropper-title">Tipo de recorte</legend>
                         <div class="row crop-style-container">
                             <div class="cropStyleItem activeRadio d-none" id="crop-style-item-d-none"></div>
@@ -63,19 +52,20 @@
                             </div>  
                         </div>
                     </div>
-                    <div class="d-block">
-                        <h5 class="d-inline">Alto</h5>
-                        <input type="number" id="dataHeight" min="1" max="2000" step="1" style="width: 60px;">
+                    <div class="d-block cropper-style-option">
+                        <legend class="cropper-title">Dimensiones</legend>
+                        <h5 class="d-inline">Alto: &nbsp;</h5>
+                        <input type="number" id="dataHeight" min="1" max="2000" step="1" style="width: 45px;border: none; background: rgba(0,0,0,0);">
                         <p class="d-inline">px &nbsp;&nbsp;|</p>
-                        <h5 class="d-inline">&nbsp;Ancho</h5>
-                        <input type="number" id="dataWidth" min="1" max="2000" step="1" style="width: 60px;">
+                        <h5 class="d-inline">&nbsp;Ancho: &nbsp;</h5>
+                        <input type="number" id="dataWidth" min="1" max="2000" step="1" style="width: 45px;border: none; background: rgba(0,0,0,0);">
                         <p class="d-inline">px</p>
                     </div>
                 </fieldset>
 
-                <fieldset class="docs-buttons">
+                <fieldset class="docs-buttons cropper-style-option">
                     <legend class="cropper-title">Opciones</legend>
-                    <button type="button" data-method="cancel" id="btnCancel">Cancelar</button>
+                    <button type="button" data-method="cancel" class="cropper-btn-secondary" id="btnCancel">Cancelar</button>
                     <div style="float: right;">
                         <button class="cropper-btn-primary" type="submit" id="btnSaveUpload">Subir</button>
                     </div>
@@ -91,19 +81,26 @@
 
                 <fieldset class="advanced d-none">
                     <legend class="cropper-title">Calidad de imagen</legend>
-                    <h5 class="d-inline">Calidad</h5>
-                    <input type="number" id="inputNumberCalidad" min="1" max="99" value="50" step="1" style="width: 60px;">
-                    <input type="range" id="inputRangeCalidad"  min="1" max="99" value="50">
+                    <div class="row" style="margin-bottom: 20px;">
+                        <div class="col-sm-5">
+                            <h5 class="d-inline">Calidad: &nbsp;</h5>
+                            <input type="number" id="inputNumberCalidad" min="1" max="99" value="50" step="1" class="d-inline" style="">
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="inputDiv pull-right">
+                                <input type="range" id="inputRangeCalidad"  min="1" max="99" value="50" class="d-inline">
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="table">
-                        <h5 style="size: 15px; margin-top: 0; margin-bottom: 10px;">Opciones avanzadas</h5>
-                        <table>
-                            <thead>
+                        <table border="0" cellspacing="0">
+                            {{-- <thead>
                                 <tr>
                                     <th>Característica</th>
                                     <th>Valor</th>
                                 </tr>
-                            </thead>
+                            </thead> --}}
                             <tbody>
                                 <tr>
                                     <td>Peso inicial</td>
@@ -123,6 +120,25 @@
                     </div>
                 </fieldset>
             </div>
+            
+            <div>
+                <label class="cropper-btn-primary">
+                    <input type="file" id="inputImage" name="inputImage" accept="image/*"/>
+                    <i class="fa fa-picture-o"></i>
+                    &nbsp; Selecciona una imagen
+                </label>
+                <a class="cropper-btn-secondary" href="{{ url()->previous() }}">
+                    <i class="fa fa-times"></i>
+                    &nbsp; Cancelar
+                </a>
+        
+                
+                <button id="btnGoBack" class="cropper-btn-secondary d-inline">
+                    <i class="fa fa-refresh"></i>
+                    &nbsp; Recargar
+                </button>
+            </div>
+
         </form>    
     </div>
 </div>
