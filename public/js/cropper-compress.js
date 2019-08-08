@@ -322,9 +322,10 @@ window.onload = function(){
       	}
 
         btnSaveUpload.innerHTML = 'Cortar';
-        btnSaveUpload.style.color = '#1A73E8';
-        btnSaveUpload.style.fontWeight = 'bold';
-        btnSaveUpload.style.background = 'white';
+        // btnSaveUpload.style.color = '#1A73E8';
+        // btnSaveUpload.style.fontWeight = 'bold';
+        // btnSaveUpload.style.background = 'white';
+        btnSaveUpload.classList.add("cropper-btn-secondary");
 
         options.crop = function(e){
             var data = e.detail;
@@ -370,9 +371,7 @@ window.onload = function(){
     btnSaveUpload.onclick = async function() {
 
         if (this.innerHTML === "Cortar") {
-            this.innerHTML = "Subir";
-            this.style.background = '#1A73E8';
-            this.style.color = 'white';
+            this.classList.add("cropper-btn-secondary");
     	    /* hacer el recorte */
     	    var croppedCanvas;
     	    croppedCanvas = cropper.getCroppedCanvas();
