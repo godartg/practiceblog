@@ -74,7 +74,7 @@ window.onload = function(){
 	     */
   		inputImage.onchange = function(e){
 
-      		btnGoBack.style.display = 'inline'; // muestra el boton de regresar
+      		btnGoBack.style.display = 'block'; // muestra el boton de regresar
             let pesoInicialShow = document.getElementById('pesoInicial');
             let file;
             var input = e.target;
@@ -90,7 +90,7 @@ window.onload = function(){
       			console.log(file); // muestra la imagen actual que esta cargada
       			fileNameImage = file.name;
                 pesoInicialSize = (parseInt(file.size) / 1024).toFixed(3);
-                pesoInicialShow.innerHTML = ": " + pesoInicialSize + " Kb";
+                pesoInicialShow.innerHTML = pesoInicialSize + " Kb";
 
                 if (/^image\/\w+/.test(file.type)) {
                     uploadedImageType = file.type;
@@ -115,7 +115,6 @@ window.onload = function(){
                         docs_buttons.style.display  = 
                         docs_advanced.style.display = 'block';
     	                inputImage.style.display    = 'none';
-                        inputImage.parentNode.style.display = 'none';
                     }
     	            // readerPng
     	            readerPng.onload = function(){
@@ -140,28 +139,27 @@ window.onload = function(){
     		 *  Este botón hace que se quite la imagen que se esta editando y pueda insertar otra
     		 */
     		btnGoBack.onclick = function () {
-       //          this.style.display = 'none';
-       //          inputImage.style.display = 'block';
-       //          console.log(file); // muestra la imagen actual que esta cargada
-       //          cropper.destroy();
-       //          source_image.style.display = 'none';
-       //          source_image.setAttribute("src", "");
-       //          console.log(recorte);
-       //          if (recorte) {
-       //              console.log(arrayImages);
-       //              document.getElementById('source_image').style.display = 'none';
-       //              // source_image.setAttribute("src", "");
-       //              // containerImage.innerHTML = 
-    			// 	// `
-    			// 	//     <img id="source_image" crossorigin="anonymous" src="">
-    			// 	//     <img id="result_image" style="display: none;" crossorigin="anonymous" src="">
-    			// 	// `;
-    			//   	arrayImages = [source_image];
-    			// }
-       //          docs_advanced.style.display 	= 
-    			// docs_buttons.style.display 		= 
-    			// docs_toggles.style.display 		= 'none';
-                location.reload();
+                this.style.display = 'none';
+                inputImage.style.display = 'block';
+                console.log(file); // muestra la imagen actual que esta cargada
+                cropper.destroy();
+                source_image.style.display = 'none';
+                source_image.setAttribute("src", "");
+                console.log(recorte);
+                if (recorte) {
+                    console.log(arrayImages);
+                    document.getElementById('source_image').style.display = 'none';
+                    // source_image.setAttribute("src", "");
+                    // containerImage.innerHTML = 
+    				// `
+    				//     <img id="source_image" crossorigin="anonymous" src="">
+    				//     <img id="result_image" style="display: none;" crossorigin="anonymous" src="">
+    				// `;
+    			  	arrayImages = [source_image];
+    			}
+                docs_advanced.style.display 	= 
+    			docs_buttons.style.display 		= 
+    			docs_toggles.style.display 		= 'none';
     		}
 
       	}
@@ -515,16 +513,16 @@ window.onload = function(){
      */
     function muestraCaracteristicas(pesoFinalSize){
         pesoInicialSize = parseFloat(pesoInicialSize);
-        pesoFinal.innerHTML =  ": "+ pesoFinalSize + " Kb";
+        pesoFinal.innerHTML = pesoFinalSize + " Kb";
         let variacionPeso = Math.abs(100 - parseInt(100 * pesoFinalSize / pesoInicialSize));
         if (pesoFinalSize <= pesoInicialSize) {
             quality.classList.add('text-success');
             quality.classList.remove('text-danger');
-            quality.innerHTML =  ": "+ variacionPeso + " % " + "más pequeño";
+            quality.innerHTML = variacionPeso + " % " + "más pequeño";
         }else{
                 quality.classList.add('text-danger');
                 quality.classList.remove('text-success');
-                quality.innerHTML =  ": "+ variacionPeso + " % " + "más grande";
+                quality.innerHTML = variacionPeso + " % " + "más grande";
         }
     }
 

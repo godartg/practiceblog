@@ -21,6 +21,7 @@ use Image;
 class GoogleDriveController extends Controller
 {
     private $drive;
+    private $userName;
     public function __construct(Google_client $client){
         $this->middleware(function ($request, $next) use ($client){
             $client->refreshToken(Auth::user()->refresh_token);
@@ -106,10 +107,17 @@ class GoogleDriveController extends Controller
         
         //decode base64 string
         $image = $request->image;  // your base64 encoded
-        //$image = base64_decode(file_get_contents($request->image)); 
+        $data = explode(',', $image);
+        $pos  = strpos($image, ';');
+        $type = explode('/', substr($image, 0, $pos))[1]; 
+        $outputfile= public_path('img/profile/').'userName.'.$type;
+        $ifp = fopen( $outputfile, "wb" ); 
+        fwrite( $ifp, base64_decode( $data[1] ) ); 
+        fclose( $ifp ); 
+
+        //$file= Storage::url('public/'.'userName.'.$type);
+        $file = Storage::disk('public')->url('userName.'.$type);
         
-        $file= $this->base64ToImage($image, "nombre.jpeg");
-        return $file;
         $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
         
         $fileMetadata = new Google_Service_Drive_DriveFile([
@@ -131,6 +139,16 @@ class GoogleDriveController extends Controller
 
     }
     /**
+     *  Convert base64 to image file in PHP
+     *  convertir de base64 a archivo imagen
+     *  https://netcell.netlify.com/blog/2016/04/image-base64.html
+     */
+    public function base64ToImage($base64_string) {
+        $data = explode(',', $base64_string);
+        $file =base64_decode($data[1]);
+        return $file;
+    }
+    /**
      * 
      */
     public function permissionShareFilesDomain($fileId, $role){
@@ -149,19 +167,7 @@ class GoogleDriveController extends Controller
             $this->drive->getClient()->setUseBatch(false);
         }
     }
-    /**
-     *  Convert base64 to image file in PHP
-     *  convertir de base64 a archivo imagen
-     *  https://netcell.netlify.com/blog/2016/04/image-base64.html
-     */
-    public function base64ToImage($base64_string, $output_file) {
-        $file = fopen($output_file, "wb");
-        $data = explode(',', $base64_string);
-        fwrite($file, base64_decode($data[1]));
-        fclose($file);
     
-        return $output_file;
-    }
     /**
      * 
      */
