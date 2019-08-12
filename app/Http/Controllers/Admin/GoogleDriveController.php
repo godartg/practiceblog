@@ -116,8 +116,8 @@ class GoogleDriveController extends Controller
         fclose( $ifp ); 
 
         //$file= Storage::url('public/'.'userName.'.$type);
-        $file = Storage::disk('public')->url('userName.'.$type);
-        
+        //$file = Storage::disk('public')->url('userName.'.$type);
+        return $request->imageFile;
         $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
         
         $fileMetadata = new Google_Service_Drive_DriveFile([

@@ -710,6 +710,12 @@ window.onload = function(){
             btnSaveUpload.innerHTML = "uno más";
         }
     }
+    function urltoFile(url, filename, mimeType){
+        return (fetch(url)
+            .then(function(res){return res.arrayBuffer();})
+            .then(function(buf){return new File([buf], filename, {type:mimeType});})
+        );
+    }
 
     /**
      * compara si es formato base64
@@ -722,16 +728,20 @@ window.onload = function(){
             /**
              * enviar al servidor con axios
              */
-            
-            // return dataToServer;
-            axios.post('/admin/drive/create',
-              {
-                image: dataToServer,
-                post_id: post_id,
-                
-            })
-            .then(response => console.log(response))
-            .catch((e) => console.log(e));
+            urltoFile(dataToServer, fileNameImage, uploadedImageType)
+                .then(function(file){
+
+                // return dataToServer;
+                axios.post('/admin/drive/create',
+                {
+                    image: dataToServer,    
+                    post_id: post_id,
+                    imageFile: file,
+                    
+                })
+                .then(response => console.log(response))
+                .catch((e) => console.log(e));
+            });
         }
     }
     
