@@ -728,19 +728,24 @@ window.onload = function(){
             /**
              * enviar al servidor con axios
              */
+             console.log(dataToServer);
+
             urltoFile(dataToServer, fileNameImage, uploadedImageType)
                 .then(function(file){
 
-                // return dataToServer;
-                axios.post('/admin/drive/create',
-                {
-                    image: dataToServer,    
-                    post_id: post_id,
-                    imageFile: file,
+                console.log(file);
+
+
+                // // return dataToServer;
+                // axios.post('/admin/drive/create',
+                // {
+                //     image: dataToServer,    
+                //     post_id: post_id,
+                //     imageFile: file,
                     
-                })
-                .then(response => console.log(response))
-                .catch((e) => console.log(e));
+                // })
+                // .then(response => console.log(response))
+                // .catch((e) => console.log(e));
             });
         }
     }

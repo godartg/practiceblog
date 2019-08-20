@@ -21,7 +21,6 @@ use Image;
 class GoogleDriveController extends Controller
 {
     private $drive;
-    private $userName;
     public function __construct(Google_client $client){
         $this->middleware(function ($request, $next) use ($client){
             $client->refreshToken(Auth::user()->refresh_token);
@@ -71,7 +70,6 @@ class GoogleDriveController extends Controller
      */
     function store(Request $request){
         //Buscar o crear practicefolder
-        //dd($request->params);
         $listFoldersRoot=$this->getDrive();
         if (count($listFoldersRoot) == 0) {
             $parent_id= $this->createFolder('practicefolder');
@@ -91,11 +89,8 @@ class GoogleDriveController extends Controller
                 $parent_id= $this->createFolder('practicefolder');
             }
         }
-        
         //Buscar o crear post
-        
-        $post_id = $request->post_id;
-        
+        $post_id =$request->input('post_id');
         $postFolderIdDrive = Post::find($post_id);
         if( $postFolderIdDrive->folder_id == '' ){
             $folderPostId = $this->createFolder($post_id, $parent_id);
@@ -103,23 +98,10 @@ class GoogleDriveController extends Controller
             $postFolderIdDrive->save();
         }else{
             $folderPostId = $postFolderIdDrive->folder_id;
+            
         }
-        
-        //decode base64 string
-        $image = $request->image;  // your base64 encoded
-        $data = explode(',', $image);
-        $pos  = strpos($image, ';');
-        $type = explode('/', substr($image, 0, $pos))[1]; 
-        $outputfile= public_path('img/profile/').'userName.'.$type;
-        $ifp = fopen( $outputfile, "wb" ); 
-        fwrite( $ifp, base64_decode( $data[1] ) ); 
-        fclose( $ifp ); 
-
-        //$file= Storage::url('public/'.'userName.'.$type);
-        //$file = Storage::disk('public')->url('userName.'.$type);
-        return $request->imageFile;
+        $file= $request->file('file');
         $name = gettype($file) === 'object' ? $file->getClientOriginalName() : $file;
-        
         $fileMetadata = new Google_Service_Drive_DriveFile([
             'name' => $name,
             'parents' => [$folderPostId]
@@ -137,16 +119,6 @@ class GoogleDriveController extends Controller
         Photo::create(['post_id'=> $post_id,'file_id'=>$file->id]);
         return back();
 
-    }
-    /**
-     *  Convert base64 to image file in PHP
-     *  convertir de base64 a archivo imagen
-     *  https://netcell.netlify.com/blog/2016/04/image-base64.html
-     */
-    public function base64ToImage($base64_string) {
-        $data = explode(',', $base64_string);
-        $file =base64_decode($data[1]);
-        return $file;
     }
     /**
      * 
@@ -167,7 +139,6 @@ class GoogleDriveController extends Controller
             $this->drive->getClient()->setUseBatch(false);
         }
     }
-    
     /**
      * 
      */
