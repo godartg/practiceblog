@@ -70,6 +70,7 @@ class GoogleDriveController extends Controller
      */
     function store(Request $request){
         //Buscar o crear practicefolder
+        // dd($request->all());
         $listFoldersRoot=$this->getDrive();
         if (count($listFoldersRoot) == 0) {
             $parent_id= $this->createFolder('practicefolder');

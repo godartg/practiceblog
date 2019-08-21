@@ -79,6 +79,7 @@ window.onload = function(){
             let file;
             var input = e.target;
             let files = this.files;
+            console.log(files);
             var reader = new FileReader();
             var readerPng = new FileReader();
             var newReader = new FileReader();
@@ -87,7 +88,7 @@ window.onload = function(){
 
     	  	if (cropper && files && files.length) {
                 file = files[0];
-      			console.log(file); // muestra la imagen actual que esta cargada
+      			// console.log(file); // muestra la imagen actual que esta cargada
       			fileNameImage = file.name;
                 pesoInicialSize = (parseInt(file.size) / 1024).toFixed(3);
                 pesoInicialShow.innerHTML = pesoInicialSize + " Kb";
@@ -102,7 +103,6 @@ window.onload = function(){
                         var actualImg = new Image();
                         actualImg.src = readerSize.result;
                         actualImg.onload = function(){
-                            console.log(actualImg.width, actualImg.height);
                             dataWidth.value = actualImg.width;
                             dataHeight.value = actualImg.height;
                         };
@@ -126,7 +126,6 @@ window.onload = function(){
                     readerPng.readAsArrayBuffer(input.files[0]);
                     if (file) reader.readAsDataURL(file);
                     source_image.src = uploadedImageURL; // esto muestra la imagen
-                    console.log(source_image);
                     cropper.destroy();
                     cropper = new Cropper(source_image, options);
                     inputImage.value = "";
@@ -710,11 +709,17 @@ window.onload = function(){
             btnSaveUpload.innerHTML = "uno más";
         }
     }
-    function urltoFile(url, filename, mimeType){
-        return (fetch(url)
-            .then(function(res){return res.arrayBuffer();})
-            .then(function(buf){return new File([buf], filename, {type:mimeType});})
-        );
+
+    // Convert base64 png data to javascript file objects
+
+    // way 1
+    function dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {type:mime});
     }
 
     /**
@@ -728,25 +733,27 @@ window.onload = function(){
             /**
              * enviar al servidor con axios
              */
-             console.log(dataToServer);
+            
+            var file = dataURLtoFile(dataToServer, fileNameImage);
 
-            urltoFile(dataToServer, fileNameImage, uploadedImageType)
-                .then(function(file){
+            const formData = new FormData();
+            formData.append('post_id', post_id);
+            formData.append('file', file);
+            // return dataToServer;
 
-                console.log(file);
+            let axiosConfig = {
+                headers:{
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'accept': 'application/json',
+                    'Accept-Language': 'en-US,en;q=0.8',
+                }
+            };
 
+            axios.post('/admin/drive/create',formData,axiosConfig)
+            .then(response => console.log(response))
+            .catch((e) => console.log(e));
 
-                // // return dataToServer;
-                // axios.post('/admin/drive/create',
-                // {
-                //     image: dataToServer,    
-                //     post_id: post_id,
-                //     imageFile: file,
-                    
-                // })
-                // .then(response => console.log(response))
-                // .catch((e) => console.log(e));
-            });
+            console.log(file);
         }
     }
     

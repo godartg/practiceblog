@@ -37,11 +37,10 @@
             let files = this.files;
             console.log(files);
         }
-        console.log(fileFormatImage);
 
-        
+        var data = new FormData();
+        console.log(data);
 
-        console.log(data4);
     </script>
 
 @endpush
