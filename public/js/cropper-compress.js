@@ -1,5 +1,5 @@
 /** 
- * CropperCompress v1.0.0
+ * CropperCompress v1.0.3
  * ----------------------
  * created: 02/05/2019
  * https://gitlab.com/D4ITON/cropper-compress.git
@@ -68,13 +68,14 @@ window.onload = function(){
 
   	// cargar imagen
   	var inputImage = document.querySelector('#inputImage');
+    var inputImageLabel = document.querySelector('#inputImageLabel');
   	if (URL) {
   		/** Boton inputImage
 	     *  Este botón carga la imagen
 	     */
   		inputImage.onchange = function(e){
 
-      		btnGoBack.style.display = 'block'; // muestra el boton de regresar
+      		btnGoBack.style.display = 'inline-block'; // muestra el boton de regresar
             let pesoInicialShow = document.getElementById('pesoInicial');
             let file;
             var input = e.target;
@@ -114,7 +115,8 @@ window.onload = function(){
                         docs_toggles.style.display  = 
                         docs_buttons.style.display  = 
                         docs_advanced.style.display = 'block';
-    	                inputImage.style.display    = 'none';
+                        inputImageLabel.style.display  = 
+    	                inputImage.style.display       = 'none';
                     }
     	            // readerPng
     	            readerPng.onload = function(){
@@ -138,27 +140,7 @@ window.onload = function(){
     		 *  Este botón hace que se quite la imagen que se esta editando y pueda insertar otra
     		 */
     		btnGoBack.onclick = function () {
-                this.style.display = 'none';
-                inputImage.style.display = 'block';
-                console.log(file); // muestra la imagen actual que esta cargada
-                cropper.destroy();
-                source_image.style.display = 'none';
-                source_image.setAttribute("src", "");
-                console.log(recorte);
-                if (recorte) {
-                    console.log(arrayImages);
-                    document.getElementById('source_image').style.display = 'none';
-                    // source_image.setAttribute("src", "");
-                    // containerImage.innerHTML = 
-    				// `
-    				//     <img id="source_image" crossorigin="anonymous" src="">
-    				//     <img id="result_image" style="display: none;" crossorigin="anonymous" src="">
-    				// `;
-    			  	arrayImages = [source_image];
-    			}
-                docs_advanced.style.display 	= 
-    			docs_buttons.style.display 		= 
-    			docs_toggles.style.display 		= 'none';
+                window.location.reload(false);
     		}
 
       	}
@@ -321,9 +303,6 @@ window.onload = function(){
       	}
 
         btnSaveUpload.innerHTML = 'Cortar';
-        // btnSaveUpload.style.color = '#1A73E8';
-        // btnSaveUpload.style.fontWeight = 'bold';
-        // btnSaveUpload.style.background = 'white';
         btnSaveUpload.classList.add("cropper-btn-secondary");
 
         options.crop = function(e){
@@ -370,7 +349,6 @@ window.onload = function(){
     btnSaveUpload.onclick = async function() {
 
         if (this.innerHTML === "Cortar") {
-            this.classList.add("cropper-btn-secondary");
     	    /* hacer el recorte */
     	    var croppedCanvas;
     	    croppedCanvas = cropper.getCroppedCanvas();
@@ -380,6 +358,14 @@ window.onload = function(){
     	    btnCancel.disabled = true;
     	    dataHeight.disabled = dataWidth.disabled = true;
     	    recorte = true; // indica que ha habido almenos un recorte
+            // agrega estilos a boton subir
+            this.classList.remove("cropper-btn-secondary");
+            this.classList.add("cropper-btn-primary");
+            // cambia color de boton cancel
+            btnCancel.classList.remove("cropper-btn-secondary");
+            btnCancel.classList.add("cropper-btn-secondary-disabled");
+
+            btnSaveUpload.innerHTML = "Subir";
        }
        else if(this.innerHTML === "Subir"  || this.innerHTML === "uno más"){
             /** Opcion subir
@@ -457,15 +443,18 @@ window.onload = function(){
      *  Este botón hace cuando esta activo el lienzo de recorte, lo cancele y se pueda subir la imagen
      */
     btnCancel.onclick = function () {
-        cropper.clear();
-        cropper.setDragMode("move");
-        this.disabled = true; 
-        dataHeight.disabled = dataWidth.disabled = true;
         resetRadio();
+        cropper.clear();
+        this.disabled = true; 
+        cropper.setDragMode("move");
+        btnCancel.classList.remove("cropper-btn-secondary");
+        btnCancel.classList.add("cropper-btn-secondary-disabled");
+        dataHeight.disabled = dataWidth.disabled = true;
+        // cambia boton cortar a subir
         if (btnSaveUpload.innerHTML === 'Cortar') {
             btnSaveUpload.innerHTML = "Subir";
-            btnSaveUpload.style.background = '#1A73E8';
-            btnSaveUpload.style.color = 'white';
+            btnSaveUpload.classList.remove("cropper-btn-secondary");
+            btnSaveUpload.classList.add("cropper-btn-primary");
         }
         dataWidth.value = getImageLive().naturalWidth;
         dataHeight.value = getImageLive().naturalHeight;
@@ -681,6 +670,8 @@ window.onload = function(){
     /** Activa boton cancelar */
     function activaBotonCancel(){
         btnCancel.disabled = false;
+        btnCancel.classList.remove("cropper-btn-secondary-disabled");
+        btnCancel.classList.add("cropper-btn-secondary");
     }
 
     /** 

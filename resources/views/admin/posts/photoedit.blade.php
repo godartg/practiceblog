@@ -54,24 +54,30 @@
                     </div>
                     <div class="d-block cropper-style-option">
                         <legend class="cropper-title">Dimensiones</legend>
-                        <h5 class="d-inline">Alto: &nbsp;</h5>
-                        <input type="number" id="dataHeight" min="1" max="2000" step="1" style="width: 45px;border: none; background: rgba(0,0,0,0);">
-                        <p class="d-inline">px &nbsp;&nbsp;|</p>
-                        <h5 class="d-inline">&nbsp;Ancho: &nbsp;</h5>
-                        <input type="number" id="dataWidth" min="1" max="2000" step="1" style="width: 45px;border: none; background: rgba(0,0,0,0);">
-                        <p class="d-inline">px</p>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="d-inline">Alto: &nbsp;</h5>
+                                <input type="number" id="dataHeight" min="1" max="2000" step="1" style="width: 45px;border: none; background: rgba(0,0,0,0);">
+                                <p class="d-inline">px &nbsp;&nbsp;</p>
+                            </div>
+                            <div>
+                                <h5 class="d-inline">&nbsp;Ancho: &nbsp;</h5>
+                                <input type="number" id="dataWidth" min="1" max="2000" step="1" style="width: 45px;border: none; background: rgba(0,0,0,0);">
+                                <p class="d-inline">px</p>
+                            </div>
+                        </div>
                     </div>
                 </fieldset>
 
                 <fieldset class="docs-buttons cropper-style-option">
                     <legend class="cropper-title">Opciones</legend>
-                    <button type="button" data-method="cancel" class="cropper-btn-secondary" id="btnCancel">Cancelar</button>
+                    <button type="button" data-method="cancel" class="cropper-btn-secondary-disabled" id="btnCancel">Cancelar</button>
                     <div style="float: right;">
                         <button class="cropper-btn-primary" type="submit" id="btnSaveUpload">Subir</button>
                     </div>
                 </fieldset>
                 
-                <fieldset class="docs-advanced">
+                <fieldset class="docs-advanced cropper-style-option">
                     <legend class="cropper-title">Información de imagen</legend>
                     <label for="activeAdvanced" class="switch">
                         <input type="checkbox" id="activeAdvanced">
@@ -95,12 +101,6 @@
                     
                     <div class="table">
                         <table border="0" cellspacing="0">
-                            {{-- <thead>
-                                <tr>
-                                    <th>Característica</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead> --}}
                             <tbody>
                                 <tr>
                                     <td>Peso inicial</td>
@@ -119,26 +119,25 @@
                         <hr>
                     </div>
                 </fieldset>
+                <fieldset>
+                    <legend class="cropper-title">Recargar o salir</legend>
+                    <div class="d-flex justify-content-between">
+                        <label id="inputImageLabel" class="cropper-btn-primary">
+                            <input type="file" id="inputImage" name="inputImage" accept="image/*"/>
+                            <i class="fa fa-picture-o"></i>
+                            &nbsp; Selecciona una imagen
+                        </label>
+                        <a class="cropper-btn-secondary" href="{{ url()->previous() }}">
+                            <i class="fa fa-times"></i>
+                            &nbsp; Cancelar
+                        </a>
+                        <button id="btnGoBack" class="cropper-btn-secondary d-inline">
+                            <i class="fa fa-refresh"></i>
+                            &nbsp; Recargar
+                        </button>
+                    </div>
+                </fieldset>
             </div>
-            
-            <div>
-                <label class="cropper-btn-primary">
-                    <input type="file" id="inputImage" name="inputImage" accept="image/*"/>
-                    <i class="fa fa-picture-o"></i>
-                    &nbsp; Selecciona una imagen
-                </label>
-                <a class="cropper-btn-secondary" href="{{ url()->previous() }}">
-                    <i class="fa fa-times"></i>
-                    &nbsp; Cancelar
-                </a>
-        
-                
-                <button id="btnGoBack" class="cropper-btn-secondary d-inline">
-                    <i class="fa fa-refresh"></i>
-                    &nbsp; Recargar
-                </button>
-            </div>
-
         </form>    
     </div>
 </div>
@@ -167,13 +166,6 @@
 	<script>
 	   var post_id = {!! $post_id !!};
 
-       // let container = document.querySelector('.crop-style-container');
-       // container.addEventListener('click', e => {
-       //  if(e.target.classList.contains('crop-style-item')){
-       //      console.log(e.target);
-       //      console.log(e.target.classList.add("activeRadio"));
-       //  }
-       // })
        let cropStyleContainer = document.querySelector('.crop-style-container');
 
        let cropStyleItem = document.getElementsByClassName("crop-style-item");
